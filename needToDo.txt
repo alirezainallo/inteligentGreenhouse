@@ -1,0 +1,13 @@
+* SIM
+
++ DS1307
++ UART
++ LDR
++ Dual ADC
++ keypad
+
+- control sensor react
+- menu
+
+(min+max)*5 = (2+2)*5 = 20
+3 * 1 * 

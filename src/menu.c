@@ -42,6 +42,7 @@ void menu_initPage(menuStat_t stat){
             pageInitTick = get_currentTick();
             
             GSM_init();
+            GSM_sendSMS("09035683914", strlen("09035683914"), "hi\npro", strlen("hi\npro"));
             break;
         case menu_getSetUpForFirst:
             switch (setUpDataBase_stat)

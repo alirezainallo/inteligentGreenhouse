@@ -45,10 +45,10 @@ char data;
    else if(data == '\n'){
       if(rx_buffer[rx_curr_buffer][rx_ind - 2] == '\r' && !smsWaitTitleOrMessage){
          // --rx_ind;
-         rx_ind -= 3;
+         rx_ind -= 2;
          forceNeedCrLf = false;
       }
-      rx_buffer[rx_curr_buffer][/*--*/rx_ind] = 0;
+      rx_buffer[rx_curr_buffer][rx_ind] = 0;
       rx_len = rx_ind;
 
       rx_ind = 0;

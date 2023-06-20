@@ -21,13 +21,18 @@ void smsReceived(char *num, char *message, char *time){
     //process messages
 
     // txSendDataLen(num,     strlen(num));
-    txSendDataLen(message, strlen(message));
+    // txSendDataLen(message, strlen(message));
     // txSendDataLen(time,    strlen(time));
 
+    // LCD_String_xy(0, 0, num);
+    // LCD_String_xy(1, 0, time);
+    LCD_String_xy(1, 0, (char*)freeLine);
+    LCD_String_xy(1, 0, message);
+
     if(get_menuStat() == menu_processGsm){
-        LCD_String_xy(1,0,(char*)freeLine);
-        sprintf(display_LCD, "%s,%d,%d,%d,%d", message, message[0], message[1], message[2], message[3]);
-        LCD_String_xy(1,0, display_LCD);
+        // LCD_String_xy(1,0,(char*)freeLine);
+        // sprintf(display_LCD, "%s,%d,%d,%d,%d", message, message[0], message[1], message[2], message[3]);
+        // LCD_String_xy(1,0, display_LCD);
     }
 }
 static char rxSmsNumber[15]  = {0};
@@ -45,10 +50,10 @@ void GSM_lineProcess(char *line, size_t len){
             
     //Res//"+CMT: "+989217791093","","23/06/16,17:29:29+14""
     if(memcmp(line, "+CMT:", 4) == 0){
+        forceNeedCrLf = true;
         // txSendDataLen(line, len);
         if(smsWaitTitleOrMessage){
             smsWaitTitleOrMessage = false;
-            forceNeedCrLf = true;
             
             rxSmsNumber[0] = 0;
             char * startNumber = (char*)memchr(line, '"', len);
@@ -58,7 +63,7 @@ void GSM_lineProcess(char *line, size_t len){
             rxSmsNumber[numLen] = 0; //Number ready
 
             // txSendDataLen(rxSmsNumber, numLen);
-            LCD_String_xy(1, 0, rxSmsNumber);
+            // LCD_String_xy(1, 0, rxSmsNumber);
 
             rxSmsTime[0] = 0;
             char * startTime = (char*)memchr(&stopNumber[1], '"', len);
@@ -74,6 +79,7 @@ void GSM_lineProcess(char *line, size_t len){
             // sprintf(display, "smsWaitTitleOrMessage:%d,forceNeedCrLf:%d,rxSmsNumber:%s,rxSmsTime:%s\n",smsWaitTitleOrMessage, forceNeedCrLf, rxSmsNumber, rxSmsTime);
             // txSendDataLen(display, strlen(display));
             
+            // LCD_String_xy(1, 0, rxSmsNumber);
             rxSmsMessage[0] = 0;
         }
         else{

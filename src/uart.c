@@ -6,7 +6,7 @@
 char* rxGetLine(void);
 void txSendData(void);
 extern void GSM_lineProcess(char *line, size_t len);
-
+extern bool smsWaitTitleOrMessage;
 // ------------------------>> loop <<--------------------------------
 // char display[17] = {0};
 
@@ -43,11 +43,12 @@ char data;
       rx_buff_overflow = true;
    }
    else if(data == '\n'){
-      if(rx_buffer[rx_curr_buffer][rx_ind - 1] == '\r'){
-         --rx_ind;
+      if(rx_buffer[rx_curr_buffer][rx_ind - 2] == '\r' && !smsWaitTitleOrMessage){
+         // --rx_ind;
+         rx_ind -= 3;
          forceNeedCrLf = false;
       }
-      rx_buffer[rx_curr_buffer][--rx_ind] = 0;
+      rx_buffer[rx_curr_buffer][/*--*/rx_ind] = 0;
       rx_len = rx_ind;
 
       rx_ind = 0;

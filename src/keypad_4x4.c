@@ -58,7 +58,7 @@ void keypad_kp_0_9_func (void)
 							if(tmp <= 100){
 								number = tmp;
 							}
-							sprintf(display_LCD, "%d %c   ", number, '%');
+							sprintf(display_LCD, "%ld %c   ", number, '%');
 							LCD_String_xy(1, 0, display_LCD);
                             break;
                         case 2:
@@ -217,7 +217,7 @@ void keypad_kp_10_func (void) //kp A   //MENU_CHANGE_PF
         case menu_starting:
             break;
         case menu_getSetUpForFirst:
-			LCD_String_xy(1, 0, freeLine);
+			LCD_String_xy(1, 0, (char*)freeLine);
 			number = 0;
 			switch (setUpDataBase_stat)
             {

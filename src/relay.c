@@ -6,7 +6,7 @@ typedef enum{
 	PIN_HIGH_LEVEL = 1,
 }PinLevel;
 
-void writePin(uint8_t *reg, uint8_t pin, PinLevel level){
+void writePin(volatile uint8_t *reg, uint8_t pin, PinLevel level){
     if(level){
         *reg |=  (1 << pin);
     }

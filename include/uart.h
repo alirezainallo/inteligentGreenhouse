@@ -11,10 +11,10 @@
 #define DATA_OVERRUN (1<<DOR)
 
 // USART Receiver buffer
-#define RX_BUFFER_SIZE 128
+#define RX_BUFFER_SIZE 256
 
 // USART Transmitter buffer
-#define TX_BUFFER_SIZE 64
+#define TX_BUFFER_SIZE 256
 
 extern size_t rx_ind;
 extern size_t rx_len;

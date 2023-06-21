@@ -11,12 +11,12 @@
 #include "e2prom.h"
 #include "timTick.h"
 #include "time_out.h"
-#include "keypad_4x4.h"
 #include "heart_beat.h"
+#include "keypad_4x4.h"
+#include "timerChecker.h"
 
 char display_LCD[17];
 const char freeLine[17] = "                ";
-
 
 
 
@@ -42,17 +42,20 @@ int main(void){
 
   while(1){
 
-    menu_loop();
     // heart_beat();
+    menu_loop();
+    keys_loop();
     keypad_process();
+    
     adc_loop();
     dht11_loop();
     mq5_loop();
     ldr_loop();
     
     GSM_loop();
+    
     RTC_loop();
-    keys_loop();
+    timerChecker_loop();
   }
 }
 

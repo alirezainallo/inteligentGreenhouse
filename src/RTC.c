@@ -1,5 +1,7 @@
 #include "RTC.h"
 
+extern bool timerChecker_RTC_update;
+
 char second,minute,hour,day,date,month;
 uint16_t year;
 
@@ -100,6 +102,8 @@ void RTC_loop(void){
   currTick = get_currentTick();
   if(nextTick < currTick){
     nextTick = currTick + RTC_TIME_OUT;
+	
+	timerChecker_RTC_update = true;
 
     RTC_Read_Clock(0);	// Read clock with second add. i.e location is 0
 	RTC_Read_Calendar(3);	// Read calendar with day address i.e location is 3 

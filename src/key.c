@@ -1,9 +1,14 @@
 #include "key.h"
 
+#include "timerChecker.h"
 
+void keyWatering_onPressed(bool state);
+void keyFan_onPressed(bool state);
+void keyHeater_onPressed(bool state);
+void keyLight_onPressed(bool state);
+void keyFertilizing_onPressed(bool state);
 
 //-------------------------------------------------------
-
 void keyWatering_onPressed(bool state) {
   //key process...
   static bool nextLevel = true;

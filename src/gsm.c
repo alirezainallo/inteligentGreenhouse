@@ -13,7 +13,7 @@ char receivedSmsFormat[] = "+CMT: \"+989035683914\",\"\",\"23/06/19,02:06:03+14\
 //Res//"+cmt: "+989217791093","","23/06/16,17:29:29+14""
 char setUpClearSim[] = "AT+CMGDA=\"DEL ALL\"\r\n";
 
-char display[256];
+// char display[256];
 
 extern menuStat_t get_menuStat(void);
 void smsReceived(char *num, char *message, char *time){
@@ -24,7 +24,7 @@ void smsReceived(char *num, char *message, char *time){
         // txSendDataLen(num,     strlen(num));
         // txSendDataLen(message, strlen(message));
         // txSendDataLen(time,    strlen(time));
-        
+
         // LCD_String_xy(0, 0, num);
         // LCD_String_xy(1, 0, time);
         LCD_String_xy(1, 0, (char*)freeLine);
@@ -40,7 +40,7 @@ char GSM_SmsBuff[RX_BUFFER_SIZE];
 size_t GSM_SmsBuffLen = 0;
 extern bool SMS_lineReady;
 void GSM_lineProcess(char *line, size_t len){
-    tgl();
+    // tgl();
     // txSendDataLen(line, len);
     // if(get_menuStat() == menu_processGsm){
     //     LCD_String_xy(1,0,(char*)freeLine);
@@ -80,20 +80,20 @@ void GSM_lineProcess(char *line, size_t len){
         smsReceived(rxSmsNumber, rxSmsMessage, rxSmsTime);
     }
 }
-void tgl(void){
-    static bool pre = false;
-    if(pre){
-        PORTA &= ~(1 << PA2);
-    }
-    else{
-        PORTA |= (1 << PA2);
-    }
-    pre = !pre;
-}
+// void tgl(void){
+//     static bool pre = false;
+//     if(pre){
+//         PORTA &= ~(1 << PA2);
+//     }
+//     else{
+//         PORTA |= (1 << PA2);
+//     }
+//     pre = !pre;
+// }
 void GSM_init(void){
-    DDRA  |= (1 << PA2);
-    PORTA |= (1 << PA2);
-    PORTA &= ~(1 << PA2);
+    // DDRA  |= (1 << PA2);
+    // PORTA |= (1 << PA2);
+    // PORTA &= ~(1 << PA2);
     uart_init();
     GSM_sendAtCommand(setUpNotifFormat, strlen(setUpNotifFormat));
     _delay_ms(500);

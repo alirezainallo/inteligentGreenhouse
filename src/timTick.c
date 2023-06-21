@@ -43,3 +43,26 @@ ISR (TIMER1_COMPA_vect){
   // TIFR |= (1 << OCF1A);
   currentTick++;
 }
+
+void tim0_init(void){
+  // Configure Timer0 control registers
+  // Timer/Counter 0 initialization
+  // Clock source: System Clock
+  // Clock value: 7.813 kHz
+  // Mode: CTC top=OCR0
+  // OC0 output: Disconnected
+  // Timer Period: 32 ms
+  TCCR0 |= (1<<WGM01) | (1<<CS02) | (1<<CS00);
+  TCNT0  = 0x00;
+  OCR0   = 0xF9;
+
+  // Enable Timer0 compare match interrupt
+  TIMSK |= (1<<OCIE0);
+}
+
+ISR (TIMER0_COMP_vect){
+  // if(yekBeYek){
+  //   Key_irq();
+  // }
+  // yekBeYek = !yekBeYek;
+}

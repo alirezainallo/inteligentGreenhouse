@@ -2,10 +2,12 @@
 #include "adc.h"
 #include "mq5.h"
 #include "gsm.h"
+#include "key.h"
 #include "RTC.h"
 #include "menu.h"
 #include "uart.h"
 #include "DHT11.h"
+#include "relay.h"
 #include "e2prom.h"
 #include "timTick.h"
 #include "time_out.h"
@@ -14,8 +16,19 @@
 
 char display_LCD[17];
 const char freeLine[17] = "                ";
+
+
+
+
 int main(void){
   
+  keys_init();
+
+  relay_init();
+
+  
+
+  // tim0_init();
 
   sei(); //enable global interrupt
   
@@ -39,7 +52,7 @@ int main(void){
     
     GSM_loop();
     RTC_loop();
-
+    keys_loop();
   }
 }
 

@@ -59,6 +59,10 @@
   "C_Cpp_Runner.useLeakSanitizer": false,
   "C_Cpp_Runner.showCompilationTime": false,
   "files.associations": {
-    "uart.h": "c"
+    "uart.h": "c",
+    "timtick.h": "c",
+    "keyport.h": "c",
+    "key.h": "c",
+    "relay.h": "c"
   }
 }

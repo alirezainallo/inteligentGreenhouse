@@ -26,5 +26,21 @@ void mq5_loop(void){
       sprintf(display_LCD, "%d", mq5_value());
       LCD_String_xy(1, 4, display_LCD);
     }
+
+    uint16_t co2Max, co2Min;
+    if((co2Max < mq5_value()) && !timerChecker_isEnable(RELAY_FAN)){
+      timer_t time;
+      turnOn(RELAY_FAN);
+      dataBase_get_alarm(SEC_CO2, &time.hour, &time.min, &time.sec);
+      timerChecker_addTimerAfterNow(SEC_TEMP, time, AlarmToTernOffFan);
+    }
+    else if((mq5_value() < co2Min) && !timerChecker_isEnable(RELAY_FAN)){
+      // timer_t time;
+      // turnOn(RELAY_);
+      // dataBase_get_alarm(SEC_TEMP, &time.hour, &time.min, &time.sec);
+      // timerChecker_addTimerAfterNow(SEC_TEMP, time, AlarmToTernOffHeater);
+    }
+    else{
+    }
   }
 }

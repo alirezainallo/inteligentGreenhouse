@@ -13,6 +13,8 @@
 #include <stdio.h>
 #include <avr/io.h>
 #include "timTick.h"
+#include "e2prom.h"
+#include "timerChecker.h"
 
 //Port where DHT sensor is connected
 #define DHT_DDR  DDRD

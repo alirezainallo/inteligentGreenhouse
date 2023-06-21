@@ -66,3 +66,18 @@ void timerChecker_addTimerAfterNow (dataBaseSec_t section, timer_t _time, timerA
 
     timerChecker_addTimer(section, calTime, callBack);
 }
+
+bool timerChecker_isEnable(dataBaseSec_t section){
+    return (bool)(timChecker[section].callBack != 0);
+}
+
+//---------------------------callBacks-----------------------------
+void AlarmToTernOffFan(void){
+	turnOff(RELAY_FAN);
+}
+void AlarmToTernOffHeater(void){
+	turnOff(RELAY_HEATER);
+}
+void AlarmToTernOffLight(void){
+    turnOff(RELAY_LIGHT);
+}

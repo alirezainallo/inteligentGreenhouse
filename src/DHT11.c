@@ -45,9 +45,45 @@ void dht11_loop(void){
 		sprintf(display_LCD, "%d", humidity_int);
 		LCD_String_xy(0, 11, display_LCD);
 	}
+
+	uint16_t tempMax, tempMin, humMax, humMin;
+	dataBase_get_max(SEC_TEMP, &tempMax);
+	dataBase_get_min(SEC_TEMP, &tempMin);
+	dataBase_get_max(SEC_HUMIDITY, &humMax);
+	dataBase_get_min(SEC_HUMIDITY, &humMin);
+
+	if(tempMax < temperature_int){
+		timer_t time;
+		turnOn(RELAY_FAN);
+		dataBase_get_alarm(SEC_TEMP, &time.hour, &time.min, &time.sec);
+		timerChecker_addTimerAfterNow(SEC_TEMP, time, AlarmToTernOffFan);
+	}
+	else if(temperature_int < tempMin){
+		timer_t time;
+		turnOn(RELAY_HEATER);
+		dataBase_get_alarm(SEC_TEMP, &time.hour, &time.min, &time.sec);
+		timerChecker_addTimerAfterNow(SEC_TEMP, time, AlarmToTernOffHeater);
+	}
+	else{
+	}
+
+	if((humMax < humidity_int) && !timerChecker_isEnable(RELAY_FAN)){
+		timer_t time;
+		turnOn(RELAY_FAN);
+		dataBase_get_alarm(SEC_HUMIDITY, &time.hour, &time.min, &time.sec);
+		timerChecker_addTimerAfterNow(SEC_HUMIDITY, time, AlarmToTernOffFan);
+	}
+	else if((humidity_int < humMin) && !timerChecker_isEnable(RELAY_FAN)){
+		// timer_t time;
+		// turnOn(RELAY_);
+		// dataBase_get_alarm(SEC_TEMP, &time.hour, &time.min, &time.sec);
+		// timerChecker_addTimerAfterNow(SEC_TEMP, time, AlarmToTernOffHeater);
+	}
+	else{
+	}
+	
   }
 }
-
 
 //main function that communicates with DHT sensor 
 #if DHT_TYPE == DHT_DHT22

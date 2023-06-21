@@ -4,6 +4,8 @@
 #include "timTick.h"
 #include "main.h"
 #include "adc.h"
+#include "e2prom.h"
+#include "timerChecker.h"
 
 void ldr_init(uint32_t ms);
 uint16_t ldr_value(void);

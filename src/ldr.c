@@ -27,5 +27,21 @@ void ldr_loop(void){
       sprintf(display_LCD, "%d", ldr_value());
       LCD_String_xy(1, 12, display_LCD);
     }
+
+    uint16_t ldrMax, ldrMin;
+    if((ldrMax < ldr_value()) && !timerChecker_isEnable(RELAY_LIGHT)){
+      // timer_t time;
+      // turnOn(RELAY_FAN);
+      // dataBase_get_alarm(SEC_CO2, &time.hour, &time.min, &time.sec);
+      // timerChecker_addTimerAfterNow(SEC_TEMP, time, AlarmToTernOffFan);
+    }
+    else if((ldr_value() < ldrMin) && !timerChecker_isEnable(RELAY_LIGHT)){
+      timer_t time;
+      turnOn(RELAY_LIGHT);
+      dataBase_get_alarm(SEC_LIGHT, &time.hour, &time.min, &time.sec);
+      timerChecker_addTimerAfterNow(SEC_LIGHT, time, AlarmToTernOffLight);
+    }
+    else{
+    }
   }
 }

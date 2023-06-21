@@ -17,29 +17,28 @@ char display[256];
 
 extern menuStat_t get_menuStat(void);
 void smsReceived(char *num, char *message, char *time){
-    // LCD_String(",P");
     //process messages
 
-    // txSendDataLen(num,     strlen(num));
-    // txSendDataLen(message, strlen(message));
-    // txSendDataLen(time,    strlen(time));
-
-    // LCD_String_xy(0, 0, num);
-    // LCD_String_xy(1, 0, time);
-    LCD_String_xy(1, 0, (char*)freeLine);
-    LCD_String_xy(1, 0, message);
 
     if(get_menuStat() == menu_processGsm){
-        // LCD_String_xy(1,0,(char*)freeLine);
-        // sprintf(display_LCD, "%s,%d,%d,%d,%d", message, message[0], message[1], message[2], message[3]);
-        // LCD_String_xy(1,0, display_LCD);
+        // txSendDataLen(num,     strlen(num));
+        // txSendDataLen(message, strlen(message));
+        // txSendDataLen(time,    strlen(time));
+        
+        // LCD_String_xy(0, 0, num);
+        // LCD_String_xy(1, 0, time);
+        LCD_String_xy(1, 0, (char*)freeLine);
+        LCD_String_xy(1, 0, message);
     }
 }
 static char rxSmsNumber[15]  = {0};
 static char rxSmsMessage[50] = {0};
 static char rxSmsTime[15]    = {0};
-bool forceNeedCrLf = false;
-bool smsWaitTitleOrMessage = true;//title true, message false
+// bool forceNeedCrLf = false;
+// bool smsWaitTitleOrMessage = true;//title true, message false
+char GSM_SmsBuff[RX_BUFFER_SIZE];
+size_t GSM_SmsBuffLen = 0;
+extern bool SMS_lineReady;
 void GSM_lineProcess(char *line, size_t len){
     tgl();
     // txSendDataLen(line, len);
@@ -49,54 +48,37 @@ void GSM_lineProcess(char *line, size_t len){
     // }
             
     //Res//"+CMT: "+989217791093","","23/06/16,17:29:29+14""
-    if(memcmp(line, "+CMT:", 4) == 0){
-        forceNeedCrLf = true;
-        // txSendDataLen(line, len);
-        if(smsWaitTitleOrMessage){
-            smsWaitTitleOrMessage = false;
-            
-            rxSmsNumber[0] = 0;
-            char * startNumber = (char*)memchr(line, '"', len);
-            char * stopNumber  = (char*)memchr(&startNumber[1], '"', len);
-            size_t numLen = (size_t)(stopNumber - startNumber) - 2;
-            memcpy(rxSmsNumber, &startNumber[2], numLen);
-            rxSmsNumber[numLen] = 0; //Number ready
-
-            // txSendDataLen(rxSmsNumber, numLen);
-            // LCD_String_xy(1, 0, rxSmsNumber);
-
-            rxSmsTime[0] = 0;
-            char * startTime = (char*)memchr(&stopNumber[1], '"', len);
-            char * stopTime  = (char*)memchr(&startTime[1], '"', len);
-            startTime = (char*)memchr(&stopTime[1], '"', len);
-            stopTime  = (char*)memchr(&startTime[1], '"', len);
-            size_t timeLen = (size_t)(stopTime - startTime) - 1;
-            memcpy(rxSmsTime, &startTime[1], timeLen);
-            rxSmsTime[timeLen] = 0; //Time ready
-
-            // txSendDataLen(rxSmsTime, timeLen);
-
-            // sprintf(display, "smsWaitTitleOrMessage:%d,forceNeedCrLf:%d,rxSmsNumber:%s,rxSmsTime:%s\n",smsWaitTitleOrMessage, forceNeedCrLf, rxSmsNumber, rxSmsTime);
-            // txSendDataLen(display, strlen(display));
-            
-            // LCD_String_xy(1, 0, rxSmsNumber);
-            rxSmsMessage[0] = 0;
-        }
-        else{
-            
-        }
-    }
-    else if(!smsWaitTitleOrMessage){
-        // LCD_String(",c");
-        strncat(rxSmsMessage, line, len);
-
-        if(!forceNeedCrLf){
-            // txSendDataLen(line, len);
-            smsWaitTitleOrMessage = true;
-            smsReceived(rxSmsNumber, rxSmsMessage, rxSmsTime);
-        }
-    }
     
+    if(SMS_lineReady){
+        SMS_lineReady = false;
+        memcpy(GSM_SmsBuff, line, len);
+        GSM_SmsBuffLen = len;
+
+        rxSmsNumber[0] = 0;
+        char * startNumber = (char*)memchr(GSM_SmsBuff, '"', GSM_SmsBuffLen);
+        char * stopNumber  = (char*)memchr(&startNumber[1], '"', GSM_SmsBuffLen);
+        size_t numLen = (size_t)(stopNumber - startNumber) - 2;
+        memcpy(rxSmsNumber, &startNumber[2], numLen);
+        rxSmsNumber[numLen] = 0; //Number ready
+
+        rxSmsTime[0] = 0;
+        char * startTime = (char*)memchr(&stopNumber[1], '"', GSM_SmsBuffLen);
+        char * stopTime  = (char*)memchr(&startTime[1], '"', GSM_SmsBuffLen);
+        startTime = (char*)memchr(&stopTime[1], '"', GSM_SmsBuffLen);
+        stopTime  = (char*)memchr(&startTime[1], '"', GSM_SmsBuffLen);
+        size_t timeLen = (size_t)(stopTime - startTime) - 1;
+        memcpy(rxSmsTime, &startTime[1], timeLen);
+        rxSmsTime[timeLen] = 0; //Time ready
+
+        rxSmsMessage[0] = 0;
+        char * startMessage = (char*)memchr(&stopNumber[1], '\n', GSM_SmsBuffLen);
+        char * stopMessage  = (char*)memchr(&startMessage[1], '\n', GSM_SmsBuffLen);
+        size_t messageLen = (size_t)(stopMessage - startMessage) - 2;
+        memcpy(rxSmsMessage, &startMessage[1], messageLen);
+        rxSmsMessage[messageLen] = 0; //Time ready
+
+        smsReceived(rxSmsNumber, rxSmsMessage, rxSmsTime);
+    }
 }
 void tgl(void){
     static bool pre = false;

@@ -22,13 +22,16 @@ void uart_loop(void){
 // ------------------------>> RX <<--------------------------------
 
 extern bool smsSignReceived;
-extern bool forceNeedCrLf;
+// extern bool forceNeedCrLf;
 char rx_buffer[2][RX_BUFFER_SIZE] = {0};
 bool rx_curr_buffer = false;
 size_t rx_ind = 0;
 size_t rx_len = 0;
 bool rx_lineReady = 0;
 bool rx_buff_overflow = 0;
+uint8_t forceNeedCrLf = 0;
+bool receivingSMS = false;
+bool SMS_lineReady = 0;
 ISR(USART_RXC_vect)
 {
 cli();
@@ -38,22 +41,34 @@ char data;
    UCSRA |= (1 << RXC);
    data = UDR;
    rx_buffer[rx_curr_buffer][rx_ind++] = data;
-   if(rx_ind >= RX_BUFFER_SIZE){
+   if(rx_ind == 5){
+      if(memcmp(rx_buffer[rx_curr_buffer], "+CMT:", 4) == 0){
+         receivingSMS = true;
+         forceNeedCrLf = 2;
+         // txSendDataLen(line, len);
+      }
+   }
+   else if(rx_ind >= RX_BUFFER_SIZE){
       rx_ind = 0;
       rx_buff_overflow = true;
    }
    else if(data == '\n'){
-      if(rx_buffer[rx_curr_buffer][rx_ind - 2] == '\r' && !smsWaitTitleOrMessage){
+      if(rx_buffer[rx_curr_buffer][rx_ind - 2] == '\r' && receivingSMS){
          // --rx_ind;
-         rx_ind -= 2;
-         forceNeedCrLf = false;
+         forceNeedCrLf--;
+         if(!forceNeedCrLf){
+            receivingSMS = false;
+            SMS_lineReady = true;
+         }
       }
-      rx_buffer[rx_curr_buffer][rx_ind] = 0;
-      rx_len = rx_ind;
+      if(!receivingSMS){
+         rx_buffer[rx_curr_buffer][rx_ind] = 0;
+         rx_len = rx_ind;
 
-      rx_ind = 0;
-      rx_curr_buffer = !rx_curr_buffer;
-      rx_lineReady = true;
+         rx_ind = 0;
+         rx_curr_buffer = !rx_curr_buffer;
+         rx_lineReady = true;
+      }
    }
    else if((data == '>') && (!smsSignReceived)){
       smsSignReceived = true;

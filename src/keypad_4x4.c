@@ -41,6 +41,99 @@ fill_time fill_tim = fill_hour;
 uint32_t number = 0;//for normal usage
 uint32_t tmp = 0;
 
+void menuKeypadTimeFormatFill_0_9(void){
+    switch (fill_tim)
+    {
+        case fill_hour:
+            if(!number){
+                timer.hour = number;
+            }
+            if(((number * 10) + get_keypad_value()) < 24){
+                number = (number * 10) + get_keypad_value();
+                timer.hour = number;
+            }
+            break;
+        case fill_min:
+            if(!number){
+                timer.min = number;
+            }
+            if(((number * 10) + get_keypad_value()) < 60){
+                number = (number * 10) + get_keypad_value();
+                timer.min = number;
+            }
+            break;
+        case fill_sec:
+            if(!number){
+                timer.sec = number;
+            }
+            if(((number * 10) + get_keypad_value()) < 60){
+                number = (number * 10) + get_keypad_value();
+                timer.sec = number;
+            }
+            break;
+
+        default:
+            break;
+    }
+    sprintf(display_LCD, "    %02d:%02d:%02d    ", timer.hour, timer.min, timer.sec);
+    LCD_String_xy(1, 0, display_LCD);
+}
+void menuKeypadTimeFormatFill_10(void){
+    switch (fill_tim)
+    {
+        case fill_hour:
+            break;
+        case fill_min:
+            fill_tim = fill_hour;
+            break;
+        case fill_sec:
+            fill_tim = fill_min;
+            break;
+        default:
+            break;
+    }
+    number = 0;
+}
+void menuKeypadTimeFormatFill_11(void){
+    switch (fill_tim)
+    {
+        case fill_hour:
+            fill_tim = fill_min;
+            break;
+        case fill_min:
+            fill_tim = fill_sec;
+            break;
+        case fill_sec:
+            break;
+        default:
+            break;
+    }
+    number = 0;
+}
+void menuKeypadTimeFormatFill_13(void){
+    memset(&timer, 0, sizeof(timer_t));
+    fill_tim = fill_hour;
+
+}
+
+void menuKeypadMinMaxFill_0_9(uint16_t max){
+    tmp = (number * 10) + get_keypad_value();
+    if(tmp <= max){
+        number = tmp;
+    }
+}
+void menuKeypadMinMaxFill_10(void){
+    LCD_String_xy(1, 0, (char*)freeLine);
+    number = 0;
+}
+void menuKeypadMinMaxFill_11(void){
+}
+uint32_t menuKeypadMinMaxFill_13(void){
+    uint32_t retVal = number;
+    number = 0;
+    return retVal;
+}
+
 void keypad_kp_0_9_func (void)
 {
 	switch(get_menuStat()){
@@ -54,14 +147,13 @@ void keypad_kp_0_9_func (void)
                     {
                         case SetUpDataBase_MIN:
                         case SetUpDataBase_MAX:
-                            tmp = (number * 10) + get_keypad_value();
-							if(tmp <= 100){
-								number = tmp;
-							}
-							sprintf(display_LCD, "%ld %c   ", number, '%');
+                            menuKeypadMinMaxFill_0_9(100);
+                            LCD_String_xy(1, 0, (char*)freeLine);
+							sprintf(display_LCD, "%3ld %c", number, '%');
 							LCD_String_xy(1, 0, display_LCD);
                             break;
-                        case 2:
+                        case SetUpDataBase_TIME:
+                            menuKeypadTimeFormatFill_0_9();
                             break;
                         default:
                             break;
@@ -71,10 +163,14 @@ void keypad_kp_0_9_func (void)
                     switch (SetUpDataBaseStep)
                     {
                         case SetUpDataBase_MIN:
-                            break;
                         case SetUpDataBase_MAX:
+                            menuKeypadMinMaxFill_0_9(100);
+                            LCD_String_xy(1, 0, (char*)freeLine);
+							sprintf(display_LCD, "%3ld %cC", number, 223);
+							LCD_String_xy(1, 0, display_LCD);
                             break;
                         case SetUpDataBase_TIME:
+                            menuKeypadTimeFormatFill_0_9();
                             break;
                         default:
                             break;
@@ -84,10 +180,15 @@ void keypad_kp_0_9_func (void)
                     switch (SetUpDataBaseStep)
                     {
                         case SetUpDataBase_MIN:
+                            menuKeypadMinMaxFill_0_9(1023);
+                            LCD_String_xy(1, 0, (char*)freeLine);
+							sprintf(display_LCD, "%3ld", number);
+							LCD_String_xy(1, 0, display_LCD);
                             break;
                         case SetUpDataBase_MAX:
                             break;
                         case SetUpDataBase_TIME:
+                            menuKeypadTimeFormatFill_0_9();
                             break;
                         default:
                             break;
@@ -97,8 +198,11 @@ void keypad_kp_0_9_func (void)
                     switch (SetUpDataBaseStep)
                     {
                         case SetUpDataBase_MIN:
-                            break;
                         case SetUpDataBase_MAX:
+                            menuKeypadMinMaxFill_0_9(100);
+                            LCD_String_xy(1, 0, (char*)freeLine);
+							sprintf(display_LCD, "%3ld %c", number, '%');
+							LCD_String_xy(1, 0, display_LCD);
                             break;
                         case SetUpDataBase_TIME:
                             break;
@@ -110,10 +214,10 @@ void keypad_kp_0_9_func (void)
                     switch (SetUpDataBaseStep)
                     {
                         case SetUpDataBase_MIN:
-                            break;
                         case SetUpDataBase_MAX:
                             break;
                         case SetUpDataBase_TIME:
+                            menuKeypadTimeFormatFill_0_9();
                             break;
                         default:
                             break;
@@ -123,10 +227,10 @@ void keypad_kp_0_9_func (void)
                     switch (SetUpDataBaseStep)
                     {
                         case SetUpDataBase_MIN:
-                            break;
                         case SetUpDataBase_MAX:
                             break;
                         case SetUpDataBase_TIME:
+                            menuKeypadTimeFormatFill_0_9();
                             break;
                         default:
                             break;
@@ -142,7 +246,7 @@ void keypad_kp_0_9_func (void)
 				case 1:
 					set_menu(menu_mainPage_Stat);
 					break;
-				case 2:
+				case SetUpDataBase_TIME:
 					set_menu(menu_mainPage_Timer);
 					break;
 				case 3:
@@ -161,34 +265,7 @@ void keypad_kp_0_9_func (void)
 		case menu_mainPage_Stat:
             break;
         case menu_mainPage_Timer:
-			// get_keypad_value()
-			
-			switch (fill_tim)
-			{
-				case fill_hour:
-					if(((number * 10) + get_keypad_value()) < 24){
-						number = (number * 10) + get_keypad_value();
-						timer.hour = number;
-					}
-					break;
-				case fill_min:
-					if(((number * 10) + get_keypad_value()) < 60){
-						number = (number * 10) + get_keypad_value();
-						timer.min = number;
-					}
-					break;
-				case fill_sec:
-					if(((number * 10) + get_keypad_value()) < 60){
-						number = (number * 10) + get_keypad_value();
-						timer.sec = number;
-					}
-					break;
-			
-				default:
-					break;
-			}
-			sprintf(display_LCD, "    %02d:%02d:%02d    ", timer.hour, timer.min, timer.sec);
-            LCD_String_xy(1, 0, display_LCD);
+			menuKeypadTimeFormatFill_0_9();
             break;
         case menu_mainPage_SetUp:
             break;
@@ -209,7 +286,7 @@ void keypad_kp_0_9_func (void)
 
 	// LCD_Char(get_keypad_value() + '0');
 	
-	_delay_ms(0); //just for save this func
+	// _delay_ms(0); //just for save this func
 }
 void keypad_kp_10_func (void) //kp A   //MENU_CHANGE_PF
 {
@@ -217,18 +294,19 @@ void keypad_kp_10_func (void) //kp A   //MENU_CHANGE_PF
         case menu_starting:
             break;
         case menu_getSetUpForFirst:
-			LCD_String_xy(1, 0, (char*)freeLine);
-			number = 0;
+			// LCD_String_xy(1, 0, (char*)freeLine);
+			// number = 0;
 			switch (setUpDataBase_stat)
             {
                 case SEC_HUMIDITY:
                     switch (SetUpDataBaseStep)
                     {
                         case SetUpDataBase_MIN:
-                            break;
                         case SetUpDataBase_MAX:
+                            menuKeypadMinMaxFill_10();
                             break;
-                        case 2:
+                        case SetUpDataBase_TIME:
+                            menuKeypadTimeFormatFill_10();
                             break;
                         default:
                             break;
@@ -238,10 +316,11 @@ void keypad_kp_10_func (void) //kp A   //MENU_CHANGE_PF
                     switch (SetUpDataBaseStep)
                     {
                         case SetUpDataBase_MIN:
-                            break;
                         case SetUpDataBase_MAX:
+                            menuKeypadMinMaxFill_10();
                             break;
                         case SetUpDataBase_TIME:
+                            menuKeypadTimeFormatFill_10();
                             break;
                         default:
                             break;
@@ -251,10 +330,11 @@ void keypad_kp_10_func (void) //kp A   //MENU_CHANGE_PF
                     switch (SetUpDataBaseStep)
                     {
                         case SetUpDataBase_MIN:
-                            break;
                         case SetUpDataBase_MAX:
+                            menuKeypadMinMaxFill_10();
                             break;
                         case SetUpDataBase_TIME:
+                            menuKeypadTimeFormatFill_10();
                             break;
                         default:
                             break;
@@ -264,8 +344,8 @@ void keypad_kp_10_func (void) //kp A   //MENU_CHANGE_PF
                     switch (SetUpDataBaseStep)
                     {
                         case SetUpDataBase_MIN:
-                            break;
                         case SetUpDataBase_MAX:
+                            menuKeypadMinMaxFill_10();
                             break;
                         case SetUpDataBase_TIME:
                             break;
@@ -277,10 +357,10 @@ void keypad_kp_10_func (void) //kp A   //MENU_CHANGE_PF
                     switch (SetUpDataBaseStep)
                     {
                         case SetUpDataBase_MIN:
-                            break;
                         case SetUpDataBase_MAX:
                             break;
                         case SetUpDataBase_TIME:
+                            menuKeypadTimeFormatFill_10();
                             break;
                         default:
                             break;
@@ -290,10 +370,10 @@ void keypad_kp_10_func (void) //kp A   //MENU_CHANGE_PF
                     switch (SetUpDataBaseStep)
                     {
                         case SetUpDataBase_MIN:
-                            break;
                         case SetUpDataBase_MAX:
                             break;
                         case SetUpDataBase_TIME:
+                            menuKeypadTimeFormatFill_10();
                             break;
                         default:
                             break;
@@ -308,23 +388,7 @@ void keypad_kp_10_func (void) //kp A   //MENU_CHANGE_PF
 		case menu_mainPage_Stat:
             break;
         case menu_mainPage_Timer:
-			switch (fill_tim)
-			{
-				case fill_hour:
-					number = 0;
-					break;
-				case fill_min:
-					fill_tim = fill_hour;
-					number = 0;
-					break;
-				case fill_sec:
-					fill_tim = fill_min;
-					number = 0;
-					break;
-				default:
-					break;
-			}
-			number = 0;
+			menuKeypadTimeFormatFill_10();
             break;
         case menu_mainPage_SetUp:
             break;
@@ -344,7 +408,7 @@ void keypad_kp_10_func (void) //kp A   //MENU_CHANGE_PF
     }
 
 	// LCD_Clear();
-	_delay_ms(10); //just for save this func
+	// _delay_ms(10); //just for save this func
 }
 void keypad_kp_11_func (void) //kp B   //MENU_VIEW_DETALES   //set MOTOR_A PF
 {
@@ -358,10 +422,10 @@ void keypad_kp_11_func (void) //kp B   //MENU_VIEW_DETALES   //set MOTOR_A PF
                     switch (SetUpDataBaseStep)
                     {
                         case SetUpDataBase_MIN:
-                            break;
                         case SetUpDataBase_MAX:
                             break;
-                        case 2:
+                        case SetUpDataBase_TIME:
+                            menuKeypadTimeFormatFill_11();
                             break;
                         default:
                             break;
@@ -371,10 +435,10 @@ void keypad_kp_11_func (void) //kp B   //MENU_VIEW_DETALES   //set MOTOR_A PF
                     switch (SetUpDataBaseStep)
                     {
                         case SetUpDataBase_MIN:
-                            break;
                         case SetUpDataBase_MAX:
                             break;
                         case SetUpDataBase_TIME:
+                            menuKeypadTimeFormatFill_11();
                             break;
                         default:
                             break;
@@ -384,10 +448,10 @@ void keypad_kp_11_func (void) //kp B   //MENU_VIEW_DETALES   //set MOTOR_A PF
                     switch (SetUpDataBaseStep)
                     {
                         case SetUpDataBase_MIN:
-                            break;
                         case SetUpDataBase_MAX:
                             break;
                         case SetUpDataBase_TIME:
+                            menuKeypadTimeFormatFill_11();
                             break;
                         default:
                             break;
@@ -397,7 +461,6 @@ void keypad_kp_11_func (void) //kp B   //MENU_VIEW_DETALES   //set MOTOR_A PF
                     switch (SetUpDataBaseStep)
                     {
                         case SetUpDataBase_MIN:
-                            break;
                         case SetUpDataBase_MAX:
                             break;
                         case SetUpDataBase_TIME:
@@ -410,10 +473,10 @@ void keypad_kp_11_func (void) //kp B   //MENU_VIEW_DETALES   //set MOTOR_A PF
                     switch (SetUpDataBaseStep)
                     {
                         case SetUpDataBase_MIN:
-                            break;
                         case SetUpDataBase_MAX:
                             break;
                         case SetUpDataBase_TIME:
+                            menuKeypadTimeFormatFill_11();
                             break;
                         default:
                             break;
@@ -423,10 +486,10 @@ void keypad_kp_11_func (void) //kp B   //MENU_VIEW_DETALES   //set MOTOR_A PF
                     switch (SetUpDataBaseStep)
                     {
                         case SetUpDataBase_MIN:
-                            break;
                         case SetUpDataBase_MAX:
                             break;
                         case SetUpDataBase_TIME:
+                            menuKeypadTimeFormatFill_11();
                             break;
                         default:
                             break;
@@ -441,20 +504,7 @@ void keypad_kp_11_func (void) //kp B   //MENU_VIEW_DETALES   //set MOTOR_A PF
 		case menu_mainPage_Stat:
             break;
         case menu_mainPage_Timer:
-			switch (fill_tim)
-			{
-				case fill_hour:
-					fill_tim = fill_min;
-					break;
-				case fill_min:
-					fill_tim = fill_sec;
-					break;
-				case fill_sec:
-					break;
-				default:
-					break;
-			}
-			number = 0;
+			menuKeypadTimeFormatFill_11();
             break;
         case menu_mainPage_SetUp:
             break;
@@ -472,7 +522,7 @@ void keypad_kp_11_func (void) //kp B   //MENU_VIEW_DETALES   //set MOTOR_A PF
             break;
     }
 
-	_delay_ms(11); //just for save this func
+	// _delay_ms(11); //just for save this func
 }
 void keypad_kp_12_func (void) //kp C   //MENU_RESET_PRODUCTS_NUM
 {
@@ -486,10 +536,9 @@ void keypad_kp_12_func (void) //kp C   //MENU_RESET_PRODUCTS_NUM
                     switch (SetUpDataBaseStep)
                     {
                         case SetUpDataBase_MIN:
-                            break;
                         case SetUpDataBase_MAX:
                             break;
-                        case 2:
+                        case SetUpDataBase_TIME:
                             break;
                         default:
                             break;
@@ -499,7 +548,6 @@ void keypad_kp_12_func (void) //kp C   //MENU_RESET_PRODUCTS_NUM
                     switch (SetUpDataBaseStep)
                     {
                         case SetUpDataBase_MIN:
-                            break;
                         case SetUpDataBase_MAX:
                             break;
                         case SetUpDataBase_TIME:
@@ -512,7 +560,6 @@ void keypad_kp_12_func (void) //kp C   //MENU_RESET_PRODUCTS_NUM
                     switch (SetUpDataBaseStep)
                     {
                         case SetUpDataBase_MIN:
-                            break;
                         case SetUpDataBase_MAX:
                             break;
                         case SetUpDataBase_TIME:
@@ -525,7 +572,6 @@ void keypad_kp_12_func (void) //kp C   //MENU_RESET_PRODUCTS_NUM
                     switch (SetUpDataBaseStep)
                     {
                         case SetUpDataBase_MIN:
-                            break;
                         case SetUpDataBase_MAX:
                             break;
                         case SetUpDataBase_TIME:
@@ -538,7 +584,6 @@ void keypad_kp_12_func (void) //kp C   //MENU_RESET_PRODUCTS_NUM
                     switch (SetUpDataBaseStep)
                     {
                         case SetUpDataBase_MIN:
-                            break;
                         case SetUpDataBase_MAX:
                             break;
                         case SetUpDataBase_TIME:
@@ -551,7 +596,6 @@ void keypad_kp_12_func (void) //kp C   //MENU_RESET_PRODUCTS_NUM
                     switch (SetUpDataBaseStep)
                     {
                         case SetUpDataBase_MIN:
-                            break;
                         case SetUpDataBase_MAX:
                             break;
                         case SetUpDataBase_TIME:
@@ -586,33 +630,35 @@ void keypad_kp_12_func (void) //kp C   //MENU_RESET_PRODUCTS_NUM
             break;
     }
 
-	_delay_ms(12); //just for save this func
+	// _delay_ms(12); //just for save this func
 }
 void keypad_kp_13_func (void) //kp D  //MENU_MAIN_PAGE
 {
 	switch(get_menuStat()){
         case menu_starting:
 			break;
-        case menu_getSetUpForFirst:
+        case menu_getSetUpForFirst: //set values
 			switch (setUpDataBase_stat)
             {
                 case SEC_HUMIDITY:
                     switch (SetUpDataBaseStep)
                     {
                         case SetUpDataBase_MIN:
-							dataBase_set_min(SEC_HUMIDITY, number);
+							dataBase_set_min(SEC_HUMIDITY, menuKeypadMinMaxFill_13());
 							SetUpDataBaseStep = SetUpDataBase_MAX;
 							set_menu(menu_getSetUpForFirst);
                             break;
                         case SetUpDataBase_MAX:
-							dataBase_set_max(SEC_HUMIDITY, number);
+							dataBase_set_max(SEC_HUMIDITY, menuKeypadMinMaxFill_13());
 							SetUpDataBaseStep = SetUpDataBase_TIME;
 							set_menu(menu_getSetUpForFirst);
                             break;
                         case SetUpDataBase_TIME:
-							// dataBase_set_alarm (SEC_HUMIDITY, number);
+							dataBase_set_alarm (SEC_HUMIDITY, timer.hour, timer.min, timer.sec);
 							SetUpDataBaseStep  = SetUpDataBase_MIN;
 							setUpDataBase_stat = SEC_TEMP;
+                            menuKeypadTimeFormatFill_13();
+                            
 							set_menu(menu_getSetUpForFirst);
                             break;
                         default:
@@ -623,10 +669,22 @@ void keypad_kp_13_func (void) //kp D  //MENU_MAIN_PAGE
                     switch (SetUpDataBaseStep)
                     {
                         case SetUpDataBase_MIN:
+							dataBase_set_min(SEC_TEMP, menuKeypadMinMaxFill_13());
+							SetUpDataBaseStep = SetUpDataBase_MAX;
+							set_menu(menu_getSetUpForFirst);
                             break;
                         case SetUpDataBase_MAX:
+							dataBase_set_max(SEC_TEMP, menuKeypadMinMaxFill_13());
+							SetUpDataBaseStep = SetUpDataBase_TIME;
+							set_menu(menu_getSetUpForFirst);
                             break;
                         case SetUpDataBase_TIME:
+							dataBase_set_alarm (SEC_TEMP, timer.hour, timer.min, timer.sec);
+							SetUpDataBaseStep  = SetUpDataBase_MAX;
+							setUpDataBase_stat = SEC_CO2;
+                            menuKeypadTimeFormatFill_13();
+                            
+							set_menu(menu_getSetUpForFirst);
                             break;
                         default:
                             break;
@@ -636,10 +694,17 @@ void keypad_kp_13_func (void) //kp D  //MENU_MAIN_PAGE
                     switch (SetUpDataBaseStep)
                     {
                         case SetUpDataBase_MIN:
-                            break;
                         case SetUpDataBase_MAX:
+							dataBase_set_max(SEC_CO2, menuKeypadMinMaxFill_13());
+							SetUpDataBaseStep = SetUpDataBase_TIME;
+							set_menu(menu_getSetUpForFirst);
                             break;
                         case SetUpDataBase_TIME:
+							dataBase_set_alarm (SEC_CO2, timer.hour, timer.min, timer.sec);
+							SetUpDataBaseStep  = SetUpDataBase_MIN;
+							setUpDataBase_stat = SEC_LIGHT;
+                            menuKeypadTimeFormatFill_13();
+							set_menu(menu_getSetUpForFirst);
                             break;
                         default:
                             break;
@@ -649,10 +714,18 @@ void keypad_kp_13_func (void) //kp D  //MENU_MAIN_PAGE
                     switch (SetUpDataBaseStep)
                     {
                         case SetUpDataBase_MIN:
+							dataBase_set_min(SEC_LIGHT, menuKeypadMinMaxFill_13());
+							SetUpDataBaseStep = SetUpDataBase_TIME;
+							set_menu(menu_getSetUpForFirst);
                             break;
                         case SetUpDataBase_MAX:
                             break;
                         case SetUpDataBase_TIME:
+							dataBase_set_alarm (SEC_LIGHT, timer.hour, timer.min, timer.sec);
+							SetUpDataBaseStep  = SetUpDataBase_TIME;
+							setUpDataBase_stat = SEC_WATERING;
+                            menuKeypadTimeFormatFill_13();
+							set_menu(menu_getSetUpForFirst);
                             break;
                         default:
                             break;
@@ -662,10 +735,14 @@ void keypad_kp_13_func (void) //kp D  //MENU_MAIN_PAGE
                     switch (SetUpDataBaseStep)
                     {
                         case SetUpDataBase_MIN:
-                            break;
                         case SetUpDataBase_MAX:
                             break;
                         case SetUpDataBase_TIME:
+                            dataBase_set_alarm (SEC_WATERING, timer.hour, timer.min, timer.sec);
+							SetUpDataBaseStep  = SetUpDataBase_TIME;
+							setUpDataBase_stat = SEC_FERTILIZING;
+                            menuKeypadTimeFormatFill_13();
+							set_menu(menu_getSetUpForFirst);
                             break;
                         default:
                             break;
@@ -675,10 +752,14 @@ void keypad_kp_13_func (void) //kp D  //MENU_MAIN_PAGE
                     switch (SetUpDataBaseStep)
                     {
                         case SetUpDataBase_MIN:
-                            break;
                         case SetUpDataBase_MAX:
                             break;
                         case SetUpDataBase_TIME:
+                            dataBase_set_alarm (SEC_FERTILIZING, timer.hour, timer.min, timer.sec);
+							SetUpDataBaseStep  = SetUpDataBase_MIN;
+							setUpDataBase_stat = SEC_HUMIDITY;
+                            menuKeypadTimeFormatFill_13();
+							set_menu(menu_mainPage);
                             break;
                         default:
                             break;
@@ -687,12 +768,12 @@ void keypad_kp_13_func (void) //kp D  //MENU_MAIN_PAGE
                 default:
                     break;
             }
-			number = 0;
             break;
         case menu_mainPage:
             break;
-		case menu_mainPage_Stat:
         case menu_mainPage_Timer:
+            menuKeypadTimeFormatFill_13();
+		case menu_mainPage_Stat:
         case menu_mainPage_SetUp:
         case menu_processGsm:
         case menu_displayTime:
@@ -704,8 +785,6 @@ void keypad_kp_13_func (void) //kp D  //MENU_MAIN_PAGE
         default:
             break;
     }
-	
-	_delay_ms(13); //just for save this func
 }
 void keypad_kp_14_func (void)
 {
@@ -719,10 +798,9 @@ void keypad_kp_14_func (void)
                     switch (SetUpDataBaseStep)
                     {
                         case SetUpDataBase_MIN:
-                            break;
                         case SetUpDataBase_MAX:
                             break;
-                        case 2:
+                        case SetUpDataBase_TIME:
                             break;
                         default:
                             break;
@@ -732,7 +810,6 @@ void keypad_kp_14_func (void)
                     switch (SetUpDataBaseStep)
                     {
                         case SetUpDataBase_MIN:
-                            break;
                         case SetUpDataBase_MAX:
                             break;
                         case SetUpDataBase_TIME:
@@ -745,7 +822,6 @@ void keypad_kp_14_func (void)
                     switch (SetUpDataBaseStep)
                     {
                         case SetUpDataBase_MIN:
-                            break;
                         case SetUpDataBase_MAX:
                             break;
                         case SetUpDataBase_TIME:
@@ -758,7 +834,6 @@ void keypad_kp_14_func (void)
                     switch (SetUpDataBaseStep)
                     {
                         case SetUpDataBase_MIN:
-                            break;
                         case SetUpDataBase_MAX:
                             break;
                         case SetUpDataBase_TIME:
@@ -771,7 +846,6 @@ void keypad_kp_14_func (void)
                     switch (SetUpDataBaseStep)
                     {
                         case SetUpDataBase_MIN:
-                            break;
                         case SetUpDataBase_MAX:
                             break;
                         case SetUpDataBase_TIME:
@@ -784,7 +858,6 @@ void keypad_kp_14_func (void)
                     switch (SetUpDataBaseStep)
                     {
                         case SetUpDataBase_MIN:
-                            break;
                         case SetUpDataBase_MAX:
                             break;
                         case SetUpDataBase_TIME:
@@ -821,7 +894,7 @@ void keypad_kp_14_func (void)
             break;
     }
 
-	_delay_ms(14); //just for save this func
+	// _delay_ms(14); //just for save this func
 }
 void keypad_kp_15_func (void)
 {
@@ -835,10 +908,9 @@ void keypad_kp_15_func (void)
                     switch (SetUpDataBaseStep)
                     {
                         case SetUpDataBase_MIN:
-                            break;
                         case SetUpDataBase_MAX:
                             break;
-                        case 2:
+                        case SetUpDataBase_TIME:
                             break;
                         default:
                             break;
@@ -848,7 +920,6 @@ void keypad_kp_15_func (void)
                     switch (SetUpDataBaseStep)
                     {
                         case SetUpDataBase_MIN:
-                            break;
                         case SetUpDataBase_MAX:
                             break;
                         case SetUpDataBase_TIME:
@@ -861,7 +932,6 @@ void keypad_kp_15_func (void)
                     switch (SetUpDataBaseStep)
                     {
                         case SetUpDataBase_MIN:
-                            break;
                         case SetUpDataBase_MAX:
                             break;
                         case SetUpDataBase_TIME:
@@ -874,7 +944,6 @@ void keypad_kp_15_func (void)
                     switch (SetUpDataBaseStep)
                     {
                         case SetUpDataBase_MIN:
-                            break;
                         case SetUpDataBase_MAX:
                             break;
                         case SetUpDataBase_TIME:
@@ -887,7 +956,6 @@ void keypad_kp_15_func (void)
                     switch (SetUpDataBaseStep)
                     {
                         case SetUpDataBase_MIN:
-                            break;
                         case SetUpDataBase_MAX:
                             break;
                         case SetUpDataBase_TIME:
@@ -900,7 +968,6 @@ void keypad_kp_15_func (void)
                     switch (SetUpDataBaseStep)
                     {
                         case SetUpDataBase_MIN:
-                            break;
                         case SetUpDataBase_MAX:
                             break;
                         case SetUpDataBase_TIME:
@@ -935,7 +1002,7 @@ void keypad_kp_15_func (void)
             break;
     }
 
-	_delay_ms(15); //just for save this func
+	// _delay_ms(15); //just for save this func
 }
 
 void keypad_process (void)

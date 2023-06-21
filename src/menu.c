@@ -19,6 +19,15 @@ void set_menu(menuStat_t menu){
     menuStat = menu;
     menu_initPage(menu);
 }
+const char S_min[] = "Enter %s min:";
+const char S_max[] = "Enter %s max:";
+const char S_time[] = "Enter %s time:";
+const char S_HR[] = "HR";
+const char S_CO2[] = "CO2";
+const char S_Temp[] = "T";
+const char S_LIGHT[] = "L";
+const char S_Watering[] = "W";
+const char S_Fertilizing[] = "F";
 void menu_initPage(menuStat_t stat){
     LCD_Clear();
 
@@ -42,7 +51,7 @@ void menu_initPage(menuStat_t stat){
             pageInitTick = get_currentTick();
             
             GSM_init();
-            GSM_sendSMS("09035683914", strlen("09035683914"), "Starting...", strlen("Starting..."));
+            // GSM_sendSMS("09035683914", strlen("09035683914"), "Starting...", strlen("Starting..."));
             break;
         case menu_getSetUpForFirst:
             switch (setUpDataBase_stat)
@@ -51,13 +60,18 @@ void menu_initPage(menuStat_t stat){
                     switch (SetUpDataBaseStep)
                     {
                         case SetUpDataBase_MIN:
-                            LCD_String_xy(0, 0, "Enter HR min:");
+                            sprintf(display_LCD, S_min, S_HR);
+                            LCD_String_xy(0, 0, display_LCD);
                             break;
                         case SetUpDataBase_MAX:
-                            LCD_String_xy(0, 0, "Enter HR max:");
+                            sprintf(display_LCD, S_max, S_HR);
+                            LCD_String_xy(0, 0, display_LCD);
                             break;
                         case SetUpDataBase_TIME:
-                            LCD_String_xy(0, 0, "Enter HR time:");
+                            sprintf(display_LCD, S_time, S_HR);
+                            LCD_String_xy(0, 0, display_LCD);
+                            sprintf(display_LCD, "    %02d:%02d:%02d    ", timer.hour, timer.min, timer.sec);
+                            LCD_String_xy(1, 0, display_LCD);
                             break;
                         default:
                             break;
@@ -67,10 +81,18 @@ void menu_initPage(menuStat_t stat){
                     switch (SetUpDataBaseStep)
                     {
                         case SetUpDataBase_MIN:
+                            sprintf(display_LCD, S_min, S_Temp);
+                            LCD_String_xy(0, 0, display_LCD);
                             break;
                         case SetUpDataBase_MAX:
+                            sprintf(display_LCD, S_max, S_Temp);
+                            LCD_String_xy(0, 0, display_LCD);
                             break;
                         case SetUpDataBase_TIME:
+                            sprintf(display_LCD, S_time, S_Temp);
+                            LCD_String_xy(0, 0, display_LCD);
+                            sprintf(display_LCD, "    %02d:%02d:%02d    ", timer.hour, timer.min, timer.sec);
+                            LCD_String_xy(1, 0, display_LCD);
                             break;
                         default:
                             break;
@@ -82,8 +104,14 @@ void menu_initPage(menuStat_t stat){
                         case SetUpDataBase_MIN:
                             break;
                         case SetUpDataBase_MAX:
+                            sprintf(display_LCD, S_max, S_CO2);
+                            LCD_String_xy(0, 0, display_LCD);
                             break;
                         case SetUpDataBase_TIME:
+                            sprintf(display_LCD, S_time, S_CO2);
+                            LCD_String_xy(0, 0, display_LCD);
+                            sprintf(display_LCD, "    %02d:%02d:%02d    ", timer.hour, timer.min, timer.sec);
+                            LCD_String_xy(1, 0, display_LCD);
                             break;
                         default:
                             break;
@@ -93,10 +121,16 @@ void menu_initPage(menuStat_t stat){
                     switch (SetUpDataBaseStep)
                     {
                         case SetUpDataBase_MIN:
+                            sprintf(display_LCD, S_min, S_LIGHT);
+                            LCD_String_xy(0, 0, display_LCD);
                             break;
-                        case SetUpDataBase_MAX:
+                        case SetUpDataBase_MAX:                
                             break;
                         case SetUpDataBase_TIME:
+                            sprintf(display_LCD, S_time, S_LIGHT);
+                            LCD_String_xy(0, 0, display_LCD);
+                            sprintf(display_LCD, "    %02d:%02d:%02d    ", timer.hour, timer.min, timer.sec);
+                            LCD_String_xy(1, 0, display_LCD);
                             break;
                         default:
                             break;
@@ -110,6 +144,10 @@ void menu_initPage(menuStat_t stat){
                         case SetUpDataBase_MAX:
                             break;
                         case SetUpDataBase_TIME:
+                            sprintf(display_LCD, S_time, S_Watering);
+                            LCD_String_xy(0, 0, display_LCD);
+                            sprintf(display_LCD, "    %02d:%02d:%02d    ", timer.hour, timer.min, timer.sec);
+                            LCD_String_xy(1, 0, display_LCD);
                             break;
                         default:
                             break;
@@ -123,6 +161,10 @@ void menu_initPage(menuStat_t stat){
                         case SetUpDataBase_MAX:
                             break;
                         case SetUpDataBase_TIME:
+                            sprintf(display_LCD, S_time, S_Fertilizing);
+                            LCD_String_xy(0, 0, display_LCD);
+                            sprintf(display_LCD, "    %02d:%02d:%02d    ", timer.hour, timer.min, timer.sec);
+                            LCD_String_xy(1, 0, display_LCD);
                             break;
                         default:
                             break;

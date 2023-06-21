@@ -4,8 +4,8 @@
 #include "main.h"
 #include "avr/eeprom.h"
 
-#define DATA_BASE_KEY 0X56
-#define DATA_BASE_STRUCT_COUNT 5
+#define DATA_BASE_KEY 0X0C
+#define DATA_BASE_STRUCT_COUNT 6
 
 typedef enum dataBaseSec_tag{
     SEC_HUMIDITY = 0,

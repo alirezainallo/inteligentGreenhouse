@@ -42,7 +42,7 @@ void menu_initPage(menuStat_t stat){
             
             LCD_Init();
 
-            heart_beat_init(500);
+            // heart_beat_init(500);
 
 
             // RTC_Init();

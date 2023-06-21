@@ -43,7 +43,7 @@ int main(void){
   while(1){
 
     menu_loop();
-    heart_beat();
+    // heart_beat();
     keypad_process();
     adc_loop();
     dht11_loop();

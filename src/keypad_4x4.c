@@ -113,6 +113,7 @@ void menuKeypadTimeFormatFill_11(void){
 void menuKeypadTimeFormatFill_13(void){
     memset(&timer, 0, sizeof(timer_t));
     fill_tim = fill_hour;
+    number = 0;
 
 }
 
@@ -180,12 +181,12 @@ void keypad_kp_0_9_func (void)
                     switch (SetUpDataBaseStep)
                     {
                         case SetUpDataBase_MIN:
+                            break;
+                        case SetUpDataBase_MAX:
                             menuKeypadMinMaxFill_0_9(1023);
                             LCD_String_xy(1, 0, (char*)freeLine);
 							sprintf(display_LCD, "%3ld", number);
 							LCD_String_xy(1, 0, display_LCD);
-                            break;
-                        case SetUpDataBase_MAX:
                             break;
                         case SetUpDataBase_TIME:
                             menuKeypadTimeFormatFill_0_9();
@@ -205,6 +206,7 @@ void keypad_kp_0_9_func (void)
 							LCD_String_xy(1, 0, display_LCD);
                             break;
                         case SetUpDataBase_TIME:
+                            menuKeypadTimeFormatFill_0_9();
                             break;
                         default:
                             break;
@@ -348,6 +350,7 @@ void keypad_kp_10_func (void) //kp A   //MENU_CHANGE_PF
                             menuKeypadMinMaxFill_10();
                             break;
                         case SetUpDataBase_TIME:
+                            menuKeypadTimeFormatFill_10();
                             break;
                         default:
                             break;
@@ -464,6 +467,7 @@ void keypad_kp_11_func (void) //kp B   //MENU_VIEW_DETALES   //set MOTOR_A PF
                         case SetUpDataBase_MAX:
                             break;
                         case SetUpDataBase_TIME:
+                            menuKeypadTimeFormatFill_11();
                             break;
                         default:
                             break;

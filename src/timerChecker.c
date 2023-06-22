@@ -81,3 +81,9 @@ void AlarmToTernOffHeater(void){
 void AlarmToTernOffLight(void){
     turnOff(RELAY_LIGHT);
 }
+void AlarmToTernOffWatering(void){
+    turnOff(RELAY_WATERING);
+}
+void AlarmToTernOffFertilizing(void){
+    turnOff(RELAY_FERTILIZING);
+}

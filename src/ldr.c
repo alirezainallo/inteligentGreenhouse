@@ -29,6 +29,8 @@ void ldr_loop(void){
     }
 
     uint16_t ldrMax, ldrMin;
+    dataBase_get_max(SEC_LIGHT, &ldrMax);
+    dataBase_get_min(SEC_LIGHT, &ldrMin);
     if((ldrMax < ldr_value()) && !timerChecker_isEnable(RELAY_LIGHT)){
       // timer_t time;
       // turnOn(RELAY_FAN);

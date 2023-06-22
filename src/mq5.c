@@ -28,6 +28,8 @@ void mq5_loop(void){
     }
 
     uint16_t co2Max, co2Min;
+    dataBase_get_max(SEC_CO2, &co2Max);
+    dataBase_get_min(SEC_CO2, &co2Min);
     if((co2Max < mq5_value()) && !timerChecker_isEnable(RELAY_FAN)){
       timer_t time;
       turnOn(RELAY_FAN);

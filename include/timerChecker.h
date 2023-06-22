@@ -20,4 +20,6 @@ void timerChecker_addTimerAfterNow (dataBaseSec_t section, timer_t _time, timerA
 void AlarmToTernOffFan(void);
 void AlarmToTernOffHeater(void);
 void AlarmToTernOffLight(void);
+void AlarmToTernOffWatering(void);
+void AlarmToTernOffFertilizing(void);
 #endif //_TIMER_CHECKER_H

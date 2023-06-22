@@ -11,65 +11,119 @@ void keyFertilizing_onPressed(bool state);
 //-------------------------------------------------------
 void keyWatering_onPressed(bool state) {
   //key process...
-  static bool nextLevel = true;
-  if(nextLevel){
-    turnOn(RELAY_WATERING);
+
+  if(timerChecker_isEnable(SEC_WATERING)){
+    turnOff(RELAY_WATERING);
+    timerChecker_freeTimer(SEC_WATERING);
   }
   else{
-    turnOff(RELAY_WATERING);
+    timer_t time;
+    turnOn(RELAY_WATERING);
+    dataBase_get_alarm(SEC_WATERING, &time.hour, &time.min, &time.sec);
+    timerChecker_addTimerAfterNow(SEC_WATERING, time, AlarmToTernOffWatering);
   }
-  nextLevel = !nextLevel;
+
+  // static bool nextLevel = true;
+  // if(nextLevel){
+  //   turnOn(RELAY_WATERING);
+  // }
+  // else{
+  //   turnOff(RELAY_WATERING);
+  // }
+  // nextLevel = !nextLevel;
 }
 void keyFan_onPressed(bool state) {
   //key process...
-  static bool nextLevel = true;
-  if(nextLevel){
-    turnOn(RELAY_FAN);
-  }
-  else{
-    turnOff(RELAY_FAN);
-  }
-  nextLevel = !nextLevel;
+
+  // if(timerChecker_isEnable(SEC_)){
+  //   turnOff(RELAY_WATERING);
+  //   timerChecker_freeTimer(SEC_WATERING);
+  // }
+  // else{
+  //   timer_t time;
+  //   turnOff(RELAY_WATERING);
+  //   dataBase_get_alarm(SEC_WATERING, &time.hour, &time.min, &time.sec);
+  //   timerChecker_addTimerAfterNow(SEC_WATERING, time, AlarmToTernOffWatering);
+  // }
+
+  // static bool nextLevel = true;
+  // if(nextLevel){
+  //   turnOn(RELAY_FAN);
+  // }
+  // else{
+  //   turnOff(RELAY_FAN);
+  // }
+  // nextLevel = !nextLevel;
     // _delay_ms(2000);
 }
 void keyHeater_onPressed(bool state) {
   //key process...
-  static bool nextLevel = true;
-  if(nextLevel){
-    turnOn(RELAY_HEATER);
-  }
-  else{
-    turnOff(RELAY_HEATER);
-  }
-//   if(nextLevel){
-//     turnOn(RELAY_LIGHT);
-//   }
-//   else{
-//     turnOff(RELAY_LIGHT);
-//   }
-  nextLevel = !nextLevel;
+  
+  // if(timerChecker_isEnable(SEC_TEMP) && ){
+  //   turnOff(RELAY_WATERING);
+  //   timerChecker_freeTimer(SEC_WATERING);
+  // }
+  // else{
+  //   timer_t time;
+  //   turnOff(RELAY_WATERING);
+  //   dataBase_get_alarm(SEC_WATERING, &time.hour, &time.min, &time.sec);
+  //   timerChecker_addTimerAfterNow(SEC_WATERING, time, AlarmToTernOffWatering);
+  // }
+
+  // static bool nextLevel = true;
+  // if(nextLevel){
+  //   turnOn(RELAY_HEATER);
+  // }
+  // else{
+  //   turnOff(RELAY_HEATER);
+  // }
+  // nextLevel = !nextLevel;
 }
 void keyLight_onPressed(bool state) {
   //key process...
-  static bool nextLevel = true;
-  if(nextLevel){
-    turnOn(RELAY_LIGHT);
+
+  if(timerChecker_isEnable(SEC_LIGHT)){
+    turnOff(RELAY_LIGHT);
+    timerChecker_freeTimer(SEC_LIGHT);
   }
   else{
-    turnOff(RELAY_LIGHT);
+    timer_t time;
+    turnOn(RELAY_LIGHT);
+    dataBase_get_alarm(SEC_LIGHT, &time.hour, &time.min, &time.sec);
+    timerChecker_addTimerAfterNow(SEC_LIGHT, time, AlarmToTernOffWatering);
   }
-  nextLevel = !nextLevel;
+
+  // static bool nextLevel = true;
+  // if(nextLevel){
+  //   turnOn(RELAY_LIGHT);
+  // }
+  // else{
+  //   turnOff(RELAY_LIGHT);
+  // }
+  // nextLevel = !nextLevel;
 }
 void keyFertilizing_onPressed(bool state) {
   //key process...
-  static bool nextLevel = true;
-  if(nextLevel){
-    turnOn(RELAY_FERTILIZING);
+
+  if(timerChecker_isEnable(SEC_FERTILIZING)){
+    turnOff(RELAY_FERTILIZING);
+    timerChecker_freeTimer(SEC_FERTILIZING);
   }
   else{
-    turnOff(RELAY_FERTILIZING);
+    timer_t time;
+    turnOn(RELAY_WATERING);
+    dataBase_get_alarm(SEC_WATERING, &time.hour, &time.min, &time.sec);
+    timerChecker_addTimerAfterNow(SEC_WATERING, time, AlarmToTernOffFertilizing);
   }
-  nextLevel = !nextLevel;
+
+  // static bool nextLevel = true;
+  // if(nextLevel){
+  //   turnOn(RELAY_FERTILIZING);
+  // }
+  // else{
+  //   turnOff(RELAY_FERTILIZING);
+  // }
+  // nextLevel = !nextLevel;
 }
 //-------------------------------------------------------
 

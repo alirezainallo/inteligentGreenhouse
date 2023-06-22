@@ -13,7 +13,6 @@ void dataBase_load(void){
 void dataBase_update(void){
     eeprom_write_block(&dataBase, 0, sizeof(dataBase_t));
 }
-
 void dataBase_init(void){
     dataBase_load();
     if(dataBase.key != DATA_BASE_KEY){

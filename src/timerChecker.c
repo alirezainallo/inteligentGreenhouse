@@ -87,3 +87,12 @@ void AlarmToTernOffWatering(void){
 void AlarmToTernOffFertilizing(void){
     turnOff(RELAY_FERTILIZING);
 }
+void setAlarmForStartWatering(void){
+    timerChecker_freeTimer(SEC_WATERING);
+    timer_t timTmp;
+    dataBase_get_alarm(SEC_WATERING, &timTmp.hour,
+                                    &timTmp.min,
+                                    &timTmp.sec);
+    turnOn(RELAY_WATERING);
+    timerChecker_addTimerAfterNow(SEC_WATERING, timTmp, AlarmToTernOffWatering);
+}

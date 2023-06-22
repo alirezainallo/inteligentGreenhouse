@@ -1,5 +1,7 @@
 #include "RTC.h"
 
+extern uint8_t menu_mainPage_Stat_page;
+
 extern bool timerChecker_RTC_update;
 
 char second,minute,hour,day,date,month;
@@ -107,29 +109,33 @@ void RTC_loop(void){
 
     RTC_Read_Clock(0);	// Read clock with second add. i.e location is 0
 	RTC_Read_Calendar(3);	// Read calendar with day address i.e location is 3 
-	if(get_menuStat() == menu_displayTime){
-		if (hour & TimeFormat12)	
-		{
-		sprintf(display_LCD, "%02d:%02d:%02d", (hour & 0b00011111), minute, second);
-		if(IsItPM(hour)){
-			strcat(display_LCD, "PM");
-		}
-		else{
-			strcat(display_LCD, "AM");
-		}
-		// lcd_print_xy(0,0,display_LCD);
-		LCD_String_xy(0,0,display_LCD);
-		}
-		else
-		{
-		sprintf(display_LCD, "%02d:%02d:%02d", (hour & 0b00011111), minute, second);
-		// lcd_print_xy(0,0,display_LCD);
-		LCD_String_xy(0,0,display_LCD);
-		}
+	if((get_menuStat() == menu_mainPage_Stat) && (menu_mainPage_Stat_page == 1)){
+		
+		sprintf(display_LCD, "    %02d:%02d:%02d    ", hour, minute, second);
+		LCD_String_xy(1, 0, display_LCD);
 
-		sprintf(display_LCD, "%02d/%02d/%04d %s", month, date, year,day!=0?days[day-1]:days[6]);
-		// lcd_print_xy(1,0,display_LCD);
-		LCD_String_xy(1,0,display_LCD);
+		// if (hour & TimeFormat12)	
+		// {
+		// sprintf(display_LCD, "%02d:%02d:%02d", (hour & 0b00011111), minute, second);
+		// if(IsItPM(hour)){
+		// 	strcat(display_LCD, "PM");
+		// }
+		// else{
+		// 	strcat(display_LCD, "AM");
+		// }
+		// // lcd_print_xy(0,0,display_LCD);
+		// LCD_String_xy(0,0,display_LCD);
+		// }
+		// else
+		// {
+		// sprintf(display_LCD, "%02d:%02d:%02d", (hour & 0b00011111), minute, second);
+		// // lcd_print_xy(0,0,display_LCD);
+		// LCD_String_xy(0,0,display_LCD);
+		// }
+
+		// sprintf(display_LCD, "%02d/%02d/%04d %s", month, date, year,day!=0?days[day-1]:days[6]);
+		// // lcd_print_xy(1,0,display_LCD);
+		// LCD_String_xy(1,0,display_LCD);
 	}
   }
 }

@@ -5,7 +5,7 @@
 #include "e2prom.h"
 #include "RTC.h"
 
-#define TIMER_CHECKER_NEED 6
+#define TIMER_CHECKER_NEED 7
 
 typedef void (*timerAlarmCallBack)(void);
 
@@ -22,4 +22,6 @@ void AlarmToTernOffHeater(void);
 void AlarmToTernOffLight(void);
 void AlarmToTernOffWatering(void);
 void AlarmToTernOffFertilizing(void);
+
+void setAlarmForStartWatering(void);
 #endif //_TIMER_CHECKER_H

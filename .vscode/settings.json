@@ -64,6 +64,11 @@
     "keyport.h": "c",
     "key.h": "c",
     "relay.h": "c",
-    "dht11.h": "c"
+    "dht11.h": "c",
+    "menu.h": "c",
+    "rtc.h": "c",
+    "timerchecker.h": "c",
+    "main.h": "c",
+    "keypad_4x4.h": "c"
   }
 }

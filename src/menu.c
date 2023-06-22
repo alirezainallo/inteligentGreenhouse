@@ -1,5 +1,8 @@
 #include "menu.h"
 
+uint8_t menu_changeSensorSetting_page = 0;
+uint8_t menu_mainPage_Stat_page       = 0;
+
 SetUpDataBaseStep_t SetUpDataBaseStep = SetUpDataBase_MIN;
 setUp_t tmpSetUpDataBase;
 dataBaseSec_t setUpDataBase_stat = SEC_HUMIDITY;
@@ -38,14 +41,15 @@ void menu_initPage(menuStat_t stat){
             mq5_init(400);
             dht11_init(450);
             
+            keys_init();
+            relay_init();
             keypad_init(FALLING_EDGE);
             
             LCD_Init();
 
             // heart_beat_init(500);
 
-
-            // RTC_Init();
+            RTC_Init();
             
             LCD_String_xy(0, 0, "Starting...");
             pageInitTick = get_currentTick();
@@ -181,10 +185,18 @@ void menu_initPage(menuStat_t stat){
             LCD_String_xy(1, 0, display_LCD);
             break;
         case menu_mainPage_Stat:
-            sprintf(display_LCD, "T:  %c   RH:  %c  ", 223, 37);
-            LCD_String_xy(0, 0, display_LCD);
-            sprintf(display_LCD, "CO2:      L:  %c  ", 37);
-            LCD_String_xy(1, 0, display_LCD);
+            if(menu_mainPage_Stat_page == 0){
+                sprintf(display_LCD, "T:  %c   RH:  %c  ", 223, 37);
+                LCD_String_xy(0, 0, display_LCD);
+                sprintf(display_LCD, "CO2:      L:  %c  ", 37);
+                LCD_String_xy(1, 0, display_LCD);
+            }
+            else if(menu_mainPage_Stat_page == 1){
+                sprintf(display_LCD, "Local Time:");
+                LCD_String_xy(0, 0, display_LCD);
+                sprintf(display_LCD, "    %02d:%02d:%02d    ", hour, minute, second);
+                LCD_String_xy(1, 0, display_LCD);
+            }
             break;
         case menu_mainPage_Timer:
             sprintf(display_LCD, "Watering time:");
@@ -195,28 +207,46 @@ void menu_initPage(menuStat_t stat){
         case menu_mainPage_SetUp:
             sprintf(display_LCD, "1.Time");
             LCD_String_xy(0, 0, display_LCD);
-            sprintf(display_LCD, "2.SensorSense");
+            sprintf(display_LCD, "2.Sensors");
             LCD_String_xy(1, 0, display_LCD);
+            // LCD_String_xy(0, 7, display_LCD);
+            /*sprintf(display_LCD, "3.Time");
+            LCD_String_xy(1, 0, display_LCD);
+            sprintf(display_LCD, "4.Sensors");
+            LCD_String_xy(1, 7, display_LCD);*/
             break;
         case menu_processGsm:
             LCD_String_xy(0, 0, "AtCmdRes:");
-            // GSM_sendSMS("09035683914",
-            // strlen("09035683914"),
-            // "HIGH error",
-            // strlen("HIGH error"));
             break;
         case menu_displayTime:
             break;
         case menu_changeClock:
+            sprintf(display_LCD, "Enter UTC time:");
+            LCD_String_xy(0, 0, display_LCD);
+            sprintf(display_LCD, "    %02d:%02d:%02d    ", timer.hour, timer.min, timer.sec);
+            LCD_String_xy(1, 0, display_LCD);
+            break;
+        case menu_changeSensorSetting:
+            if(menu_changeSensorSetting_page == 0){
+                sprintf(display_LCD, "1.watering 2.CO2");
+                LCD_String_xy(0, 0, display_LCD);
+                sprintf(display_LCD, "3.temp   4.light");
+                LCD_String_xy(1, 0, display_LCD);
+            }
+            else{
+                sprintf(display_LCD, "5.fertilizing");
+                LCD_String_xy(0, 0, display_LCD);
+                sprintf(display_LCD, "6.humidity");
+                LCD_String_xy(1, 0, display_LCD);
+            }
             break;
         case menu_setRtcAlarm:
-            break;
-        case menu_debugKeypad_displaySensor:
             break;
         default:
             break;
     }
 }
+
 void menu_loop(void){
     uint32_t currTick = 0;
     currTick = get_currentTick();
@@ -251,6 +281,8 @@ void menu_loop(void){
         case menu_displayTime:
             break;
         case menu_changeClock:
+            break;
+        case menu_changeSensorSetting:
             break;
         case menu_setRtcAlarm:
             break;

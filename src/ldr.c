@@ -4,6 +4,8 @@ uint32_t ldr_ms = 450;
 
 extern menuStat_t get_menuStat(void);
 
+extern uint8_t menu_mainPage_Stat_page;
+
 void ldr_init(uint32_t ms){
   //adc_init(200);//init alone
   ldr_ms = ms;
@@ -22,7 +24,7 @@ void ldr_loop(void){
     // display_LCD[17];
     nextTick = currTick + ldr_ms;
     // LCD_Clear();
-    if(get_menuStat() == menu_mainPage_Stat){
+    if((get_menuStat() == menu_mainPage_Stat) && (menu_mainPage_Stat_page == 0)){
       LCD_String_xy(1, 12, "  ");
       sprintf(display_LCD, "%d", ldr_value());
       LCD_String_xy(1, 12, display_LCD);

@@ -3,6 +3,8 @@
 uint32_t mq5_ms = 500;
 extern menuStat_t get_menuStat(void);
 
+extern uint8_t menu_mainPage_Stat_page;
+
 void mq5_init(uint32_t ms){
   //adc_init(200);//init alone
   mq5_ms = ms;
@@ -21,7 +23,7 @@ void mq5_loop(void){
     // static char display_LCD[17];
     nextTick = currTick + mq5_ms;
     // LCD_Clear();
-    if(get_menuStat() == menu_mainPage_Stat){
+    if((get_menuStat() == menu_mainPage_Stat) && (menu_mainPage_Stat_page == 0)){
       LCD_String_xy(1, 4, "      ");
       sprintf(display_LCD, "%d", mq5_value());
       LCD_String_xy(1, 4, display_LCD);

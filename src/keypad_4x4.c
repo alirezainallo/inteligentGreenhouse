@@ -1,5 +1,4 @@
 #include "keypad_4x4.h"
-#include "uart.h"
 
 #define IDLE_OUTPUT_KEY 16
 
@@ -37,6 +36,11 @@ typedef enum{
 }fill_time;
 
 fill_time fill_tim = fill_hour;
+
+extern uint8_t menu_changeSensorSetting_page;
+extern uint8_t menu_mainPage_Stat_page;
+
+bool runTimeSetting = false;
 
 uint32_t number = 0;//for normal usage
 uint32_t tmp = 0;
@@ -248,7 +252,7 @@ void keypad_kp_0_9_func (void)
 				case 1:
 					set_menu(menu_mainPage_Stat);
 					break;
-				case SetUpDataBase_TIME:
+				case 2:
 					set_menu(menu_mainPage_Timer);
 					break;
 				case 3:
@@ -270,12 +274,57 @@ void keypad_kp_0_9_func (void)
 			menuKeypadTimeFormatFill_0_9();
             break;
         case menu_mainPage_SetUp:
+            switch (get_keypad_value())
+			{
+				case 1:
+					set_menu(menu_changeClock);
+					break;
+				case 2:
+                    menu_changeSensorSetting_page = 0;
+					set_menu(menu_changeSensorSetting);
+					break;
+				default:
+					break;
+			}
             break;
         case menu_processGsm:
             break;
         case menu_displayTime:
             break;
         case menu_changeClock:
+            break;
+        case menu_changeSensorSetting:
+            switch (get_keypad_value())
+			{
+				case 1:
+                    SetUpDataBaseStep  = SetUpDataBase_TIME;
+                    setUpDataBase_stat = SEC_WATERING;
+					break;
+				case 2:
+                    SetUpDataBaseStep  = SetUpDataBase_MAX;
+                    setUpDataBase_stat = SEC_CO2;
+					break;
+				case 3:
+                    SetUpDataBaseStep  = SetUpDataBase_MIN;
+                    setUpDataBase_stat = SEC_TEMP;
+					break;
+				case 4:
+                    SetUpDataBaseStep  = SetUpDataBase_MIN;
+                    setUpDataBase_stat = SEC_LIGHT;
+					break;
+				case 5:
+                    SetUpDataBaseStep  = SetUpDataBase_TIME;
+                    setUpDataBase_stat = SEC_FERTILIZING;
+					break;
+				case 6:
+                    SetUpDataBaseStep  = SetUpDataBase_MIN;
+                    setUpDataBase_stat = SEC_HUMIDITY;
+					break;
+				default:
+					break;
+			}
+            runTimeSetting = true;
+            set_menu(menu_getSetUpForFirst);
             break;
         case menu_setRtcAlarm:
             break;
@@ -389,6 +438,11 @@ void keypad_kp_10_func (void) //kp A   //MENU_CHANGE_PF
         case menu_mainPage:
             break;
 		case menu_mainPage_Stat:
+            menu_mainPage_Stat_page++;
+            if(menu_mainPage_Stat_page >= 2){
+                menu_mainPage_Stat_page = 0;
+            }
+            set_menu(menu_mainPage_Stat);
             break;
         case menu_mainPage_Timer:
 			menuKeypadTimeFormatFill_10();
@@ -400,6 +454,13 @@ void keypad_kp_10_func (void) //kp A   //MENU_CHANGE_PF
         case menu_displayTime:
             break;
         case menu_changeClock:
+            break;
+        case menu_changeSensorSetting:
+            menu_changeSensorSetting_page++;
+            if(menu_changeSensorSetting_page >= 2){
+                menu_changeSensorSetting_page = 0;
+            }
+            set_menu(menu_changeSensorSetting);
             break;
         case menu_setRtcAlarm:
             break;
@@ -518,6 +579,8 @@ void keypad_kp_11_func (void) //kp B   //MENU_VIEW_DETALES   //set MOTOR_A PF
             break;
         case menu_changeClock:
             break;
+        case menu_changeSensorSetting:
+            break;
         case menu_setRtcAlarm:
             break;
         case menu_debugKeypad_displaySensor:
@@ -626,6 +689,8 @@ void keypad_kp_12_func (void) //kp C   //MENU_RESET_PRODUCTS_NUM
             break;
         case menu_changeClock:
             break;
+        case menu_changeSensorSetting:
+            break;
         case menu_setRtcAlarm:
             break;
         case menu_debugKeypad_displaySensor:
@@ -663,7 +728,13 @@ void keypad_kp_13_func (void) //kp D  //MENU_MAIN_PAGE
 							setUpDataBase_stat = SEC_TEMP;
                             menuKeypadTimeFormatFill_13();
                             
-							set_menu(menu_getSetUpForFirst);
+                            if(runTimeSetting){
+                                runTimeSetting = false;
+                                set_menu(menu_changeSensorSetting);
+                            }
+                            else{
+                                set_menu(menu_getSetUpForFirst);
+                            }
                             break;
                         default:
                             break;
@@ -688,7 +759,13 @@ void keypad_kp_13_func (void) //kp D  //MENU_MAIN_PAGE
 							setUpDataBase_stat = SEC_CO2;
                             menuKeypadTimeFormatFill_13();
                             
-							set_menu(menu_getSetUpForFirst);
+							if(runTimeSetting){
+                                runTimeSetting = false;
+                                set_menu(menu_changeSensorSetting);
+                            }
+                            else{
+                                set_menu(menu_getSetUpForFirst);
+                            }
                             break;
                         default:
                             break;
@@ -708,7 +785,13 @@ void keypad_kp_13_func (void) //kp D  //MENU_MAIN_PAGE
 							SetUpDataBaseStep  = SetUpDataBase_MIN;
 							setUpDataBase_stat = SEC_LIGHT;
                             menuKeypadTimeFormatFill_13();
-							set_menu(menu_getSetUpForFirst);
+							if(runTimeSetting){
+                                runTimeSetting = false;
+                                set_menu(menu_changeSensorSetting);
+                            }
+                            else{
+                                set_menu(menu_getSetUpForFirst);
+                            }
                             break;
                         default:
                             break;
@@ -729,7 +812,13 @@ void keypad_kp_13_func (void) //kp D  //MENU_MAIN_PAGE
 							SetUpDataBaseStep  = SetUpDataBase_TIME;
 							setUpDataBase_stat = SEC_WATERING;
                             menuKeypadTimeFormatFill_13();
-							set_menu(menu_getSetUpForFirst);
+							if(runTimeSetting){
+                                runTimeSetting = false;
+                                set_menu(menu_changeSensorSetting);
+                            }
+                            else{
+                                set_menu(menu_getSetUpForFirst);
+                            }
                             break;
                         default:
                             break;
@@ -746,7 +835,13 @@ void keypad_kp_13_func (void) //kp D  //MENU_MAIN_PAGE
 							SetUpDataBaseStep  = SetUpDataBase_TIME;
 							setUpDataBase_stat = SEC_FERTILIZING;
                             menuKeypadTimeFormatFill_13();
-							set_menu(menu_getSetUpForFirst);
+							if(runTimeSetting){
+                                runTimeSetting = false;
+                                set_menu(menu_changeSensorSetting);
+                            }
+                            else{
+                                set_menu(menu_getSetUpForFirst);
+                            }
                             break;
                         default:
                             break;
@@ -763,7 +858,13 @@ void keypad_kp_13_func (void) //kp D  //MENU_MAIN_PAGE
 							SetUpDataBaseStep  = SetUpDataBase_MIN;
 							setUpDataBase_stat = SEC_HUMIDITY;
                             menuKeypadTimeFormatFill_13();
-							set_menu(menu_mainPage);
+							if(runTimeSetting){
+                                runTimeSetting = false;
+                                set_menu(menu_changeSensorSetting);
+                            }
+                            else{
+                                set_menu(menu_getSetUpForFirst);
+                            }
                             break;
                         default:
                             break;
@@ -776,7 +877,12 @@ void keypad_kp_13_func (void) //kp D  //MENU_MAIN_PAGE
         case menu_mainPage:
             break;
         case menu_mainPage_Timer:
+            //timer.hour, timer.min, timer.sec
+            timerChecker_addTimer(SEC_AlarmForTimerChecker, timer, setAlarmForStartWatering);
             menuKeypadTimeFormatFill_13();
+            set_menu(menu_mainPage);
+            break;
+        case menu_changeSensorSetting:
 		case menu_mainPage_Stat:
         case menu_mainPage_SetUp:
         case menu_processGsm:
@@ -790,6 +896,7 @@ void keypad_kp_13_func (void) //kp D  //MENU_MAIN_PAGE
             break;
     }
 }
+
 void keypad_kp_14_func (void)
 {
 	switch(get_menuStat()){
@@ -889,6 +996,8 @@ void keypad_kp_14_func (void)
         case menu_displayTime:
             break;
         case menu_changeClock:
+            break;
+        case menu_changeSensorSetting:
             break;
         case menu_setRtcAlarm:
             break;
@@ -997,6 +1106,8 @@ void keypad_kp_15_func (void)
         case menu_displayTime:
             break;
         case menu_changeClock:
+            break;
+        case menu_changeSensorSetting:
             break;
         case menu_setRtcAlarm:
             break;

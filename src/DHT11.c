@@ -3,6 +3,7 @@
 #define DHT_TIMEOUT 200
 
 extern menuStat_t get_menuStat(void);
+extern uint8_t menu_mainPage_Stat_page;
 
 static uint32_t ht11_ms  = 200;
 
@@ -37,7 +38,7 @@ void dht11_loop(void){
     
 	dht_GetTempUtil(&temperature_int, &humidity_int);
 
-	if(get_menuStat() == menu_mainPage_Stat){
+	if((get_menuStat() == menu_mainPage_Stat) && (menu_mainPage_Stat_page == 0)){
 		LCD_String_xy(0, 2, "  ");
 		LCD_String_xy(0, 11, "  ");
 		sprintf(display_LCD, "%d", temperature_int);

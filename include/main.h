@@ -26,6 +26,7 @@ typedef enum menuStat_tag{
     menu_displayTime,
     menu_debugKeypad_displaySensor,
     menu_changeClock,
+    menu_changeSensorSetting,
     menu_setRtcAlarm,
 }menuStat_t;
 

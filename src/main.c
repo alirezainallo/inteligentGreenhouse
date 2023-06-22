@@ -21,12 +21,6 @@ const char freeLine[17] = "                ";
 
 
 int main(void){
-  
-  keys_init();
-
-  relay_init();
-
-  
 
   // tim0_init();
 

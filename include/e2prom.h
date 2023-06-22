@@ -14,6 +14,7 @@ typedef enum dataBaseSec_tag{
     SEC_LIGHT,
     SEC_WATERING,
     SEC_FERTILIZING,
+    SEC_AlarmForTimerChecker,
 }dataBaseSec_t;
 
 typedef struct clock_time_tag

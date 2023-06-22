@@ -1,13 +1,15 @@
-* SIM
-
++ SIM
 + DS1307
 + UART
 + LDR
 + Dual ADC
 + keypad
++ control sensor react
++ menu
 
-- control sensor react
-- menu
++ sensor setting in run time
++ display time
+- sim panel control
+* check plans
 
-(min+max)*5 = (2+2)*5 = 20
-3 * 1 * 
+- Set RTC from SMS time

@@ -13,6 +13,7 @@ void mq5_init(uint32_t ms){
 uint16_t mq5_value(void){
   uint16_t mq5Val = 0;
   mq5Val = get_adc_value(adc_ch4);
+  mq5Val = (uint16_t)(((uint32_t)mq5Val*10000)/1023);
   return mq5Val; 
 }
 static uint32_t nextTick = 0;

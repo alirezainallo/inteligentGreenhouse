@@ -1,6 +1,6 @@
 #include "gsm.h"
 
-void tgl(void);
+
 
 char testGsm[]           = "AT\r\n";
 char setUpNotifFormat[]  = "AT+CNMI=1,2,0,0,0\r\n";
@@ -19,6 +19,7 @@ extern menuStat_t get_menuStat(void);
 void smsReceived(char *num, char *message, char *time){
     //process messages
 
+    
 
     if(get_menuStat() == menu_processGsm){
         // txSendDataLen(num,     strlen(num));
@@ -40,7 +41,6 @@ char GSM_SmsBuff[RX_BUFFER_SIZE];
 size_t GSM_SmsBuffLen = 0;
 extern bool SMS_lineReady;
 void GSM_lineProcess(char *line, size_t len){
-    // tgl();
     // txSendDataLen(line, len);
     // if(get_menuStat() == menu_processGsm){
     //     LCD_String_xy(1,0,(char*)freeLine);

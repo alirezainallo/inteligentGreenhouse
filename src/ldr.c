@@ -12,8 +12,9 @@ void ldr_init(uint32_t ms){
   adc_start(adc_ch5);
 }
 uint16_t ldr_value(void){
-  uint16_t ldrVal = 0;
-  ldrVal = get_adc_value(adc_ch5);
+  uint16_t ldrVal = 1023;
+  ldrVal -= get_adc_value(adc_ch5);
+  ldrVal  = (uint16_t)(((uint32_t)ldrVal*100)/1023);
   return ldrVal; 
 }
 static uint32_t nextTick = 0;
@@ -25,7 +26,7 @@ void ldr_loop(void){
     nextTick = currTick + ldr_ms;
     // LCD_Clear();
     if((get_menuStat() == menu_mainPage_Stat) && (menu_mainPage_Stat_page == 0)){
-      LCD_String_xy(1, 12, "  ");
+      LCD_String_xy(1, 12, "    ");
       sprintf(display_LCD, "%d", ldr_value());
       LCD_String_xy(1, 12, display_LCD);
     }

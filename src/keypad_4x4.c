@@ -863,7 +863,7 @@ void keypad_kp_13_func (void) //kp D  //MENU_MAIN_PAGE
                                 set_menu(menu_changeSensorSetting);
                             }
                             else{
-                                set_menu(menu_getSetUpForFirst);
+                                set_menu(menu_mainPage);
                             }
                             break;
                         default:

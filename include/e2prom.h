@@ -4,7 +4,7 @@
 #include "main.h"
 #include "avr/eeprom.h"
 
-#define DATA_BASE_KEY 0X03
+#define DATA_BASE_KEY 0X04
 #define DATA_BASE_STRUCT_COUNT 6
 
 typedef enum dataBaseSec_tag{

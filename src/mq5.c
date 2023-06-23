@@ -37,7 +37,7 @@ void mq5_loop(void){
       timer_t time;
       turnOn(RELAY_FAN);
       dataBase_get_alarm(SEC_CO2, &time.hour, &time.min, &time.sec);
-      timerChecker_addTimerAfterNow(SEC_TEMP, time, AlarmToTernOffFan);
+      timerChecker_addTimerAfterNow(SEC_CO2, time, AlarmToTernOffFan);
     }
     else if((mq5_value() < co2Min) && !timerChecker_isEnable(RELAY_FAN)){
       // timer_t time;

@@ -53,13 +53,13 @@ void dht11_loop(void){
 	dataBase_get_max(SEC_HUMIDITY, &humMax);
 	dataBase_get_min(SEC_HUMIDITY, &humMin);
 
-	if(tempMax < temperature_int){
+	if((tempMax < temperature_int) && !timerChecker_isEnable(SEC_TEMP)){
 		timer_t time;
 		turnOn(RELAY_FAN);
 		dataBase_get_alarm(SEC_TEMP, &time.hour, &time.min, &time.sec);
 		timerChecker_addTimerAfterNow(SEC_TEMP, time, AlarmToTernOffFan);
 	}
-	else if(temperature_int < tempMin){
+	else if((temperature_int < tempMin) && !timerChecker_isEnable(SEC_TEMP)){
 		timer_t time;
 		turnOn(RELAY_HEATER);
 		dataBase_get_alarm(SEC_TEMP, &time.hour, &time.min, &time.sec);
@@ -68,13 +68,13 @@ void dht11_loop(void){
 	else{
 	}
 
-	if((humMax < humidity_int) && !timerChecker_isEnable(RELAY_FAN)){
+	if((humMax < humidity_int) && !timerChecker_isEnable(SEC_HUMIDITY)){
 		timer_t time;
 		turnOn(RELAY_FAN);
 		dataBase_get_alarm(SEC_HUMIDITY, &time.hour, &time.min, &time.sec);
 		timerChecker_addTimerAfterNow(SEC_HUMIDITY, time, AlarmToTernOffFan);
 	}
-	else if((humidity_int < humMin) && !timerChecker_isEnable(RELAY_FAN)){
+	else if((humidity_int < humMin) && !timerChecker_isEnable(SEC_HUMIDITY)){
 		// timer_t time;
 		// turnOn(RELAY_);
 		// dataBase_get_alarm(SEC_TEMP, &time.hour, &time.min, &time.sec);

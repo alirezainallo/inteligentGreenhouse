@@ -26,21 +26,21 @@ void ldr_loop(void){
     nextTick = currTick + ldr_ms;
     // LCD_Clear();
     if((get_menuStat() == menu_mainPage_Stat) && (menu_mainPage_Stat_page == 0)){
-      LCD_String_xy(1, 12, "    ");
+      LCD_String_xy(1, 13, "  ");
       sprintf(display_LCD, "%d", ldr_value());
-      LCD_String_xy(1, 12, display_LCD);
+      LCD_String_xy(1, 13, display_LCD);
     }
 
     uint16_t ldrMax, ldrMin;
     dataBase_get_max(SEC_LIGHT, &ldrMax);
     dataBase_get_min(SEC_LIGHT, &ldrMin);
-    if((ldrMax < ldr_value()) && !timerChecker_isEnable(RELAY_LIGHT)){
+    if((ldrMax < ldr_value()) && !timerChecker_isEnable(SEC_LIGHT)){
       // timer_t time;
       // turnOn(RELAY_FAN);
       // dataBase_get_alarm(SEC_CO2, &time.hour, &time.min, &time.sec);
       // timerChecker_addTimerAfterNow(SEC_TEMP, time, AlarmToTernOffFan);
     }
-    else if((ldr_value() < ldrMin) && !timerChecker_isEnable(RELAY_LIGHT)){
+    else if((ldr_value() < ldrMin) && !timerChecker_isEnable(SEC_LIGHT)){
       timer_t time;
       turnOn(RELAY_LIGHT);
       dataBase_get_alarm(SEC_LIGHT, &time.hour, &time.min, &time.sec);

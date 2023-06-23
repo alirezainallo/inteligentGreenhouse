@@ -187,9 +187,9 @@ void keypad_kp_0_9_func (void)
                         case SetUpDataBase_MIN:
                             break;
                         case SetUpDataBase_MAX:
-                            menuKeypadMinMaxFill_0_9(1023);
+                            menuKeypadMinMaxFill_0_9(10000);
                             LCD_String_xy(1, 0, (char*)freeLine);
-							sprintf(display_LCD, "%3ld", number);
+							sprintf(display_LCD, "%5ld ppm", number);
 							LCD_String_xy(1, 0, display_LCD);
                             break;
                         case SetUpDataBase_TIME:
@@ -292,6 +292,7 @@ void keypad_kp_0_9_func (void)
         case menu_displayTime:
             break;
         case menu_changeClock:
+            menuKeypadTimeFormatFill_0_9();
             break;
         case menu_changeSensorSetting:
             switch (get_keypad_value())
@@ -454,6 +455,7 @@ void keypad_kp_10_func (void) //kp A   //MENU_CHANGE_PF
         case menu_displayTime:
             break;
         case menu_changeClock:
+            menuKeypadTimeFormatFill_10();
             break;
         case menu_changeSensorSetting:
             menu_changeSensorSetting_page++;
@@ -578,6 +580,7 @@ void keypad_kp_11_func (void) //kp B   //MENU_VIEW_DETALES   //set MOTOR_A PF
         case menu_displayTime:
             break;
         case menu_changeClock:
+            menuKeypadTimeFormatFill_11();
             break;
         case menu_changeSensorSetting:
             break;
@@ -876,6 +879,11 @@ void keypad_kp_13_func (void) //kp D  //MENU_MAIN_PAGE
             break;
         case menu_mainPage:
             break;
+        case menu_changeClock:
+            RTC_Clock_Write(timer.hour,timer.min,timer.sec);
+            menuKeypadTimeFormatFill_13();
+            set_menu(menu_mainPage);
+            break;
         case menu_mainPage_Timer:
             //timer.hour, timer.min, timer.sec
             timerChecker_addTimer(SEC_AlarmForTimerChecker, timer, setAlarmForStartWatering);
@@ -887,7 +895,6 @@ void keypad_kp_13_func (void) //kp D  //MENU_MAIN_PAGE
         case menu_mainPage_SetUp:
         case menu_processGsm:
         case menu_displayTime:
-        case menu_changeClock:
         case menu_setRtcAlarm:
         case menu_debugKeypad_displaySensor:
 			set_menu(menu_mainPage);

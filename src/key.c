@@ -90,7 +90,7 @@ void keyLight_onPressed(bool state) {
     timer_t time;
     turnOn(RELAY_LIGHT);
     dataBase_get_alarm(SEC_LIGHT, &time.hour, &time.min, &time.sec);
-    timerChecker_addTimerAfterNow(SEC_LIGHT, time, AlarmToTernOffWatering);
+    timerChecker_addTimerAfterNow(SEC_LIGHT, time, AlarmToTernOffLight);
   }
 
   // static bool nextLevel = true;

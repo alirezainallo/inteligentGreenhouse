@@ -188,7 +188,7 @@ void menu_initPage(menuStat_t stat){
             if(menu_mainPage_Stat_page == 0){
                 sprintf(display_LCD, "T:  %c   RH:  %c  ", 223, 37);
                 LCD_String_xy(0, 0, display_LCD);
-                sprintf(display_LCD, "CO2:      L:  %c  ", 37);
+                sprintf(display_LCD, "CO2:       L:  %c", 37);
                 LCD_String_xy(1, 0, display_LCD);
             }
             else if(menu_mainPage_Stat_page == 1){

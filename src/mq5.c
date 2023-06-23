@@ -13,7 +13,7 @@ void mq5_init(uint32_t ms){
 uint16_t mq5_value(void){
   uint16_t mq5Val = 0;
   mq5Val = get_adc_value(adc_ch4);
-  mq5Val = (uint16_t)(((uint32_t)mq5Val*10000)/1023);
+  mq5Val = (uint16_t)(((uint32_t)mq5Val*10000)/1023);//ppm
   return mq5Val; 
 }
 static uint32_t nextTick = 0;
@@ -33,13 +33,13 @@ void mq5_loop(void){
     uint16_t co2Max, co2Min;
     dataBase_get_max(SEC_CO2, &co2Max);
     dataBase_get_min(SEC_CO2, &co2Min);
-    if((co2Max < mq5_value()) && !timerChecker_isEnable(RELAY_FAN)){
+    if((co2Max < mq5_value()) && !timerChecker_isEnable(SEC_CO2)){
       timer_t time;
       turnOn(RELAY_FAN);
       dataBase_get_alarm(SEC_CO2, &time.hour, &time.min, &time.sec);
       timerChecker_addTimerAfterNow(SEC_CO2, time, AlarmToTernOffFan);
     }
-    else if((mq5_value() < co2Min) && !timerChecker_isEnable(RELAY_FAN)){
+    else if((mq5_value() < co2Min) && !timerChecker_isEnable(SEC_CO2)){
       // timer_t time;
       // turnOn(RELAY_);
       // dataBase_get_alarm(SEC_TEMP, &time.hour, &time.min, &time.sec);

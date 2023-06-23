@@ -10,10 +10,8 @@
 // {
 // 	char buffer[20];
 // 	char* days[7]= {"Sun","Mon","Tue","Wed","Thu","Fri","Sat"};
-
 // 	I2C_Init();			/* Initialize I2C */
 // 	lcdinit();			/* Initialize LCD16x2 */
-
 //     while(1)
 //     {
 // 		RTC_Read_Clock(0);	/* Read clock with second add. i.e location is 0 */
@@ -25,8 +23,7 @@
 // 			else
 // 			strcat(buffer, "AM");
 // 			lcd_print_xy(0,0,buffer);
-// 		}
-		
+// 		}	
 // 		else
 // 		{
 // 			sprintf(buffer, "%02x:%02x:%02x  ", (hour & 0b00011111), minute, second);

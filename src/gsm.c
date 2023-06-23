@@ -31,9 +31,11 @@ void smsReceived(char *num, char *message, char *time){
         sscanf(&message[3], "%2hhd", &tim.hour);
         sscanf(&message[6], "%2hhd", &tim.min);
         sscanf(&message[9], "%2hhd", &tim.sec);
-        LCD_String_xy(0,0,(char*)freeLine);
-        sprintf(display_LCD, "%d:%d:%d", tim.hour, tim.min, tim.sec);
-        LCD_String_xy(0,0, display_LCD);
+        if(get_menuStat() == menu_processGsm){
+            LCD_String_xy(1,0,(char*)freeLine);
+            sprintf(display_LCD, "%d:%d:%d", tim.hour, tim.min, tim.sec);
+            LCD_String_xy(1,0, display_LCD);
+        }
         timerChecker_addTimer(SEC_AlarmForTimerChecker, tim, setAlarmForStartWatering);
         // turnOn(RELAY_WATERING);
         // timerChecker_addTimer(SEC_AlarmForTimerChecker, tim, setAlarmForStartWatering);
@@ -42,9 +44,11 @@ void smsReceived(char *num, char *message, char *time){
         sscanf(&message[3], "%2hhd", &tim.hour);
         sscanf(&message[6], "%2hhd", &tim.min);
         sscanf(&message[9], "%2hhd", &tim.sec);
-        LCD_String_xy(0,0,(char*)freeLine);
-        sprintf(display_LCD, "%d:%d:%d", tim.hour, tim.min, tim.sec);
-        LCD_String_xy(0,0, display_LCD);
+        if(get_menuStat() == menu_processGsm){
+            LCD_String_xy(1,0,(char*)freeLine);
+            sprintf(display_LCD, "%d:%d:%d", tim.hour, tim.min, tim.sec);
+            LCD_String_xy(1,0, display_LCD);
+        }
         turnOn(RELAY_FERTILIZING);
         timerChecker_addTimerAfterNow(SEC_FERTILIZING, tim, AlarmToTernOffFertilizing);
     }
@@ -56,8 +60,8 @@ void smsReceived(char *num, char *message, char *time){
 
         // LCD_String_xy(0, 0, num);
         // LCD_String_xy(1, 0, time);
-        LCD_String_xy(1, 0, (char*)freeLine);
-        LCD_String_xy(1, 0, message);
+        // LCD_String_xy(1, 0, (char*)freeLine);
+        // LCD_String_xy(1, 0, message);
     }
 }
 static char rxSmsNumber[15]  = {0};

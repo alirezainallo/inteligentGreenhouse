@@ -1147,7 +1147,7 @@ void keypad_process (void)
 			case 7:
 			case 8:
 			case 9:
-			keypad_kp_0_9_func();
+			    keypad_kp_0_9_func();
 			break;
 			case 10:
 				keypad_kp_10_func();

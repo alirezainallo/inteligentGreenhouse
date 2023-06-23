@@ -70,6 +70,8 @@
     "timerchecker.h": "c",
     "main.h": "c",
     "keypad_4x4.h": "c",
-    "gsm.h": "c"
+    "gsm.h": "c",
+    "e2prom.h": "c",
+    "adc.h": "c"
   }
 }

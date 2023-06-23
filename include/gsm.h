@@ -4,6 +4,8 @@
 #include "main.h"
 #include "uart.h"
 #include "LCD.h"
+#include "e2prom.h"
+#include "timerChecker.h"
 
 extern char testGsm[];
 extern char setUpNotifFormat[];

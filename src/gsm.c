@@ -15,11 +15,39 @@ char setUpClearSim[] = "AT+CMGDA=\"DEL ALL\"\r\n";
 
 // char display[256];
 
+
+
+//Watering Alarm
+char CMD_WA[] = "WA,  :  :  ,";
+//Fertilizing Timer
+char CMD_FT[] = "FT,  :  :  ,";
+
 extern menuStat_t get_menuStat(void);
 void smsReceived(char *num, char *message, char *time){
     //process messages
+    timer_t tim;
 
-    
+    if(memcmp(CMD_WA, message, 2) == 0){
+        sscanf(&message[3], "%2hhd", &tim.hour);
+        sscanf(&message[6], "%2hhd", &tim.min);
+        sscanf(&message[9], "%2hhd", &tim.sec);
+        LCD_String_xy(0,0,(char*)freeLine);
+        sprintf(display_LCD, "%d:%d:%d", tim.hour, tim.min, tim.sec);
+        LCD_String_xy(0,0, display_LCD);
+        timerChecker_addTimer(SEC_AlarmForTimerChecker, tim, setAlarmForStartWatering);
+        // turnOn(RELAY_WATERING);
+        // timerChecker_addTimer(SEC_AlarmForTimerChecker, tim, setAlarmForStartWatering);
+    }
+    else if(memcmp(CMD_FT, message, 2) == 0){
+        sscanf(&message[3], "%2hhd", &tim.hour);
+        sscanf(&message[6], "%2hhd", &tim.min);
+        sscanf(&message[9], "%2hhd", &tim.sec);
+        LCD_String_xy(0,0,(char*)freeLine);
+        sprintf(display_LCD, "%d:%d:%d", tim.hour, tim.min, tim.sec);
+        LCD_String_xy(0,0, display_LCD);
+        turnOn(RELAY_FERTILIZING);
+        timerChecker_addTimerAfterNow(SEC_FERTILIZING, tim, AlarmToTernOffFertilizing);
+    }
 
     if(get_menuStat() == menu_processGsm){
         // txSendDataLen(num,     strlen(num));

@@ -69,6 +69,7 @@
     "rtc.h": "c",
     "timerchecker.h": "c",
     "main.h": "c",
-    "keypad_4x4.h": "c"
+    "keypad_4x4.h": "c",
+    "gsm.h": "c"
   }
 }

@@ -917,6 +917,7 @@ void keypad_kp_13_func (void) //kp D  //MENU_MAIN_PAGE
             set_menu(menu_mainPage);
             break;
         case menu_mainPage_Timer:
+            set_menu(menu_mainPage);
             break;
         case menu_mainPage_TimerFertilizing:
             // timerChecker_addTimer(SEC_AlarmForTimerChecker2, timer, setAlarmForStartFertilizing);

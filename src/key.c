@@ -111,9 +111,9 @@ void keyFertilizing_onPressed(bool state) {
   }
   else{
     timer_t time;
-    turnOn(RELAY_WATERING);
-    dataBase_get_alarm(SEC_WATERING, &time.hour, &time.min, &time.sec);
-    timerChecker_addTimerAfterNow(SEC_WATERING, time, AlarmToTernOffFertilizing);
+    turnOn(RELAY_FERTILIZING);
+    dataBase_get_alarm(SEC_FERTILIZING, &time.hour, &time.min, &time.sec);
+    timerChecker_addTimerAfterNow(SEC_FERTILIZING, time, AlarmToTernOffFertilizing);
   }
 
   // static bool nextLevel = true;

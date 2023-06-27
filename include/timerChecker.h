@@ -23,5 +23,6 @@ void AlarmToTernOffLight(void);
 void AlarmToTernOffWatering(void);
 void AlarmToTernOffFertilizing(void);
 
+void setAlarmForStartFertilizing(void);
 void setAlarmForStartWatering(void);
 #endif //_TIMER_CHECKER_H

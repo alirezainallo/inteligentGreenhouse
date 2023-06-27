@@ -2,6 +2,8 @@
 
 #define IDLE_OUTPUT_KEY 16
 
+timer_t timer_Watering    = {0};
+timer_t timer_Fertilizing = {0};
 
 typedef enum{
 	PIN_LOW  = 0,
@@ -271,6 +273,22 @@ void keypad_kp_0_9_func (void)
 		case menu_mainPage_Stat:
             break;
         case menu_mainPage_Timer:
+            switch (get_keypad_value())
+			{
+				case 1:
+					set_menu(menu_mainPage_TimerWatering);
+					break;
+				case 2:
+					set_menu(menu_mainPage_TimerFertilizing);
+					break;
+				default:
+					break;
+			}
+            break;
+        case menu_mainPage_TimerFertilizing:
+			menuKeypadTimeFormatFill_0_9();
+            break;
+        case menu_mainPage_TimerWatering:
 			menuKeypadTimeFormatFill_0_9();
             break;
         case menu_mainPage_SetUp:
@@ -446,6 +464,11 @@ void keypad_kp_10_func (void) //kp A   //MENU_CHANGE_PF
             set_menu(menu_mainPage_Stat);
             break;
         case menu_mainPage_Timer:
+            break;
+        case menu_mainPage_TimerFertilizing:
+			menuKeypadTimeFormatFill_10();
+            break;
+        case menu_mainPage_TimerWatering:
 			menuKeypadTimeFormatFill_10();
             break;
         case menu_mainPage_SetUp:
@@ -571,6 +594,11 @@ void keypad_kp_11_func (void) //kp B   //MENU_VIEW_DETALES   //set MOTOR_A PF
 		case menu_mainPage_Stat:
             break;
         case menu_mainPage_Timer:
+            break;
+        case menu_mainPage_TimerFertilizing:
+			menuKeypadTimeFormatFill_11();
+            break;
+        case menu_mainPage_TimerWatering:
 			menuKeypadTimeFormatFill_11();
             break;
         case menu_mainPage_SetUp:
@@ -683,6 +711,10 @@ void keypad_kp_12_func (void) //kp C   //MENU_RESET_PRODUCTS_NUM
 		case menu_mainPage_Stat:
             break;
         case menu_mainPage_Timer:
+            break;
+        case menu_mainPage_TimerFertilizing:
+            break;
+        case menu_mainPage_TimerWatering:
             break;
         case menu_mainPage_SetUp:
             break;
@@ -885,8 +917,19 @@ void keypad_kp_13_func (void) //kp D  //MENU_MAIN_PAGE
             set_menu(menu_mainPage);
             break;
         case menu_mainPage_Timer:
+            break;
+        case menu_mainPage_TimerFertilizing:
+            // timerChecker_addTimer(SEC_AlarmForTimerChecker2, timer, setAlarmForStartFertilizing);
+            timer_Fertilizing = timer;
+            timerChecker_addTimerAfterNow(SEC_AlarmForTimerChecker2, timer, setAlarmForStartFertilizing);
+            menuKeypadTimeFormatFill_13();
+            set_menu(menu_mainPage);
+            break;
+        case menu_mainPage_TimerWatering:
             //timer.hour, timer.min, timer.sec
-            timerChecker_addTimer(SEC_AlarmForTimerChecker, timer, setAlarmForStartWatering);
+            // timerChecker_addTimer(SEC_AlarmForTimerChecker, timer, setAlarmForStartWatering);
+            timer_Watering = timer;
+            timerChecker_addTimerAfterNow(SEC_AlarmForTimerChecker, timer, setAlarmForStartWatering);
             menuKeypadTimeFormatFill_13();
             set_menu(menu_mainPage);
             break;
@@ -993,6 +1036,10 @@ void keypad_kp_14_func (void)
 		case menu_mainPage_Stat:
             break;
         case menu_mainPage_Timer:
+            break;
+        case menu_mainPage_TimerFertilizing:
+            break;
+        case menu_mainPage_TimerWatering:
 			//set Timer for check with RTC
 			// with "timer"
             break;
@@ -1105,6 +1152,10 @@ void keypad_kp_15_func (void)
 		case menu_mainPage_Stat:
             break;
         case menu_mainPage_Timer:
+            break;
+        case menu_mainPage_TimerFertilizing:
+            break;
+        case menu_mainPage_TimerWatering:
             break;
         case menu_mainPage_SetUp:
             break;

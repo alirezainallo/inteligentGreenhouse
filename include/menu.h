@@ -18,7 +18,7 @@
 //     menu_starting = 0,
 //     menu_mainPage,
 //     menu_mainPage_Stat,
-//     menu_mainPage_Timer,
+//     menu_mainPage_TimerWatering,
 //     menu_mainPage_SetUp,
 //     menu_processGsm,
 //     menu_displayTime,

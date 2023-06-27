@@ -2,6 +2,8 @@
 
 bool timerChecker_RTC_update = false;
 
+extern timer_t timer_Watering;
+extern timer_t timer_Fertilizing;
 
 typedef struct timerChecker
 {
@@ -83,9 +85,15 @@ void AlarmToTernOffLight(void){
 }
 void AlarmToTernOffWatering(void){
     turnOff(RELAY_WATERING);
+    if(timer_Watering.hour||timer_Watering.min||timer_Watering.sec){
+        timerChecker_addTimerAfterNow(SEC_AlarmForTimerChecker, timer_Watering, setAlarmForStartWatering);
+    }
 }
 void AlarmToTernOffFertilizing(void){
     turnOff(RELAY_FERTILIZING);
+    if(timer_Fertilizing.hour||timer_Fertilizing.min||timer_Fertilizing.sec){
+        timerChecker_addTimerAfterNow(SEC_AlarmForTimerChecker2, timer_Fertilizing, setAlarmForStartFertilizing);
+    }
 }
 void setAlarmForStartWatering(void){
     timerChecker_freeTimer(SEC_WATERING);
@@ -95,4 +103,13 @@ void setAlarmForStartWatering(void){
                                     &timTmp.sec);
     turnOn(RELAY_WATERING);
     timerChecker_addTimerAfterNow(SEC_WATERING, timTmp, AlarmToTernOffWatering);
+}
+void setAlarmForStartFertilizing(void){
+    timerChecker_freeTimer(SEC_FERTILIZING);
+    timer_t timTmp;
+    dataBase_get_alarm(SEC_FERTILIZING, &timTmp.hour,
+                                    &timTmp.min,
+                                    &timTmp.sec);
+    turnOn(RELAY_FERTILIZING);
+    timerChecker_addTimerAfterNow(SEC_FERTILIZING, timTmp, AlarmToTernOffFertilizing);
 }

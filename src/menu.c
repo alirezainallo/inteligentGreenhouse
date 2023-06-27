@@ -199,6 +199,18 @@ void menu_initPage(menuStat_t stat){
             }
             break;
         case menu_mainPage_Timer:
+            sprintf(display_LCD, "1.Watering");
+            LCD_String_xy(0, 0, display_LCD);
+            sprintf(display_LCD, "2.Fertilizing");
+            LCD_String_xy(1, 0, display_LCD);
+            break;
+        case menu_mainPage_TimerFertilizing:
+            sprintf(display_LCD, "Fert time:");
+            LCD_String_xy(0, 0, display_LCD);
+            sprintf(display_LCD, "    %02d:%02d:%02d    ", timer.hour, timer.min, timer.sec);
+            LCD_String_xy(1, 0, display_LCD);
+            break;
+        case menu_mainPage_TimerWatering:
             sprintf(display_LCD, "Watering time:");
             LCD_String_xy(0, 0, display_LCD);
             sprintf(display_LCD, "    %02d:%02d:%02d    ", timer.hour, timer.min, timer.sec);
@@ -273,6 +285,10 @@ void menu_loop(void){
             // mq5_loop();
             break;
         case menu_mainPage_Timer:
+            break;
+        case menu_mainPage_TimerFertilizing:
+            break;
+        case menu_mainPage_TimerWatering:
             break;
         case menu_mainPage_SetUp:
             break;

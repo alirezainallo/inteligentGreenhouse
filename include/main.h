@@ -21,6 +21,8 @@ typedef enum menuStat_tag{
     menu_mainPage,
     menu_mainPage_Stat,
     menu_mainPage_Timer,
+    menu_mainPage_TimerWatering,
+    menu_mainPage_TimerFertilizing,
     menu_mainPage_SetUp,
     menu_processGsm,
     menu_displayTime,

@@ -49,8 +49,9 @@ void smsReceived(char *num, char *message, char *time){
             sprintf(display_LCD, "%d:%d:%d", tim.hour, tim.min, tim.sec);
             LCD_String_xy(1,0, display_LCD);
         }
-        turnOn(RELAY_FERTILIZING);
-        timerChecker_addTimerAfterNow(SEC_FERTILIZING, tim, AlarmToTernOffFertilizing);
+        timerChecker_addTimer(SEC_AlarmForTimerChecker2, tim, setAlarmForStartFertilizing);
+        // turnOn(RELAY_FERTILIZING);
+        // timerChecker_addTimerAfterNow(SEC_FERTILIZING, tim, AlarmToTernOffFertilizing);
     }
 
     if(get_menuStat() == menu_processGsm){

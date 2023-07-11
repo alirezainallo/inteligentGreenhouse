@@ -14,7 +14,7 @@ void ldr_init(uint32_t ms){
 uint16_t ldr_value(void){
   uint16_t ldrVal = 1023;
   ldrVal -= get_adc_value(adc_ch5);
-  ldrVal  = (uint16_t)(((uint32_t)ldrVal*100)/1023);
+  ldrVal  = 100 - (uint16_t)(((uint32_t)ldrVal*100)/1023);
   return ldrVal; 
 }
 static uint32_t nextTick = 0;

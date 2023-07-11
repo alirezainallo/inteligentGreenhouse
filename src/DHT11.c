@@ -75,10 +75,10 @@ void dht11_loop(void){
 		timerChecker_addTimerAfterNow(SEC_HUMIDITY, time, AlarmToTernOffFan);
 	}
 	else if((humidity_int < humMin) && !timerChecker_isEnable(SEC_HUMIDITY)){
-		// timer_t time;
-		// turnOn(RELAY_);
-		// dataBase_get_alarm(SEC_TEMP, &time.hour, &time.min, &time.sec);
-		// timerChecker_addTimerAfterNow(SEC_TEMP, time, AlarmToTernOffHeater);
+		timer_t time;
+		turnOn(RELAY_WATERING);
+		dataBase_get_alarm(SEC_HUMIDITY, &time.hour, &time.min, &time.sec);
+		timerChecker_addTimerAfterNow(SEC_HUMIDITY, time, AlarmToTernOffWatering);
 	}
 	else{
 	}

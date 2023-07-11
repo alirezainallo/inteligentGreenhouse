@@ -5,7 +5,7 @@
 #include "e2prom.h"
 #include "RTC.h"
 
-#define TIMER_CHECKER_NEED 7
+#define TIMER_CHECKER_NEED 8
 
 typedef void (*timerAlarmCallBack)(void);
 
